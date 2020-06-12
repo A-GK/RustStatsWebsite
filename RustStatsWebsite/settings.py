@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,3 +119,48 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+if not 'test' in sys.argv:  # Disable logging during unit tests
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'basic': {
+                'format': '{levelname}|{asctime}|{module}: {message}',
+                'datefmt': '%Y-%m-%d %H:%M:%S',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'django': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'formatter': 'basic',
+                'filename': os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/django.log'),
+                'maxBytes': 1048576,
+                'backupCount': 2
+            },
+            'rust_stats': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'formatter': 'basic',
+                'filename': os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/rust_stats.log'),
+                'maxBytes': 1048576,
+                'backupCount': 3
+            },
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'basic'
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['django', 'console'],
+                'level': 'WARNING',
+                'propagate': True
+            },
+            'rust_stats': {
+                'handlers': ['rust_stats', 'console'],
+                'level': 'DEBUG',
+            }
+        },
+    }
