@@ -7,7 +7,10 @@ from .models import User
 
 
 logger = logging.getLogger("rust_stats")
+
 is_test = 'test' in argv
+if is_test:
+    from .mock_test_data import *
 
 ############################# BEGIN USER STATS ############################# 
 def get_raw_user_stats(steamid):
@@ -17,34 +20,36 @@ def get_raw_user_stats(steamid):
     Returns None if profile is private or an error is encountered.
     """
     logger.debug(f"Attempting to get raw user stats. steamid {steamid}")
-    try:
-        user_stats = requests.get("http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002?", 
-        params={"key": steam_api_key, "appid": "252490", "steamid": str(steamid)})
-        logger.debug(f"Successfully got raw user stats. steamid {steamid}")
-    except Exception:
-        logger.debug(f"Encountered a caught exception while trying to get raw user stats. steamid {steamid}", exc_info=True)
-        return None
-
-    if user_stats.status_code == 500:  # Profile is private
-        logger.debug(f"Encountered a caught exception while trying to get raw user stats. The profile is private. steamid {steamid}", exc_info=True)
-        return None
-        
-    if user_stats.status_code == 400:  # User does not own rust
-        logger.debug(f"Encountered a caught exception while trying to get raw user stats. The user does not own rust. steamid {steamid}", exc_info=True)
-        return None
-    elif user_stats.status_code != 200:  # Something went wrong
-        logger.warning(f"Encountered a caught exception while trying to get raw user stats. Response is not 200. steamid {steamid}", exc_info=True)
-        return None
-    else:
+    if not is_test:
         try:
-            user_stats = user_stats.json()
-            user_stats = user_stats["playerstats"]["stats"]
-            logger.debug(f"Finished get_raw_user_stats() successfully.")
-            return user_stats
+            user_stats = requests.get("http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002?", 
+            params={"key": steam_api_key, "appid": "252490", "steamid": str(steamid)})
+            logger.debug(f"Successfully got raw user stats. steamid {steamid}")
         except Exception:
-            logger.warning(f"Encountered a caught exception while tryting to remove useless information from user_stats \
-            (unknown format of the returned api response?). steamid {steamid}", exc_info=True)
+            logger.debug(f"Encountered a caught exception while trying to get raw user stats. steamid {steamid}", exc_info=True)
             return None
+
+        if user_stats.status_code == 500:  # Profile is private
+            logger.debug(f"Encountered a caught exception while trying to get raw user stats. The profile is private. steamid {steamid}", exc_info=True)
+            return None
+            
+        if user_stats.status_code == 400:  # User does not own rust
+            logger.debug(f"Encountered a caught exception while trying to get raw user stats. The user does not own rust. steamid {steamid}", exc_info=True)
+            return None
+        elif user_stats.status_code != 200:  # Something went wrong
+            logger.warning(f"Encountered a caught exception while trying to get raw user stats. Response is not 200. steamid {steamid}", exc_info=True)
+            return None
+        user_stats = user_stats.json()
+    else:
+        user_stats = steam_raw_game_stats_request
+    try:
+        user_stats = user_stats["playerstats"]["stats"]
+        logger.debug(f"Finished get_raw_user_stats() successfully.")
+        return user_stats
+    except Exception:
+        logger.warning(f"Encountered a caught exception while tryting to remove useless information from user_stats \
+        (unknown format of the returned api response?). steamid {steamid}", exc_info=True)
+        return None
 
 
 def parse_raw_user_stats(raw_user_stats):
@@ -105,32 +110,34 @@ def get_user_stats(steamid):
 
 
 def get_user_name_and_avatar(steamid):
-    try:
-        user_info = requests.get("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/", 
-        params={"key": steam_api_key, "steamids": str(steamid)})
-    except Exception:
-        logger.warning(f"Encountered a caught exception while trying to get user's profile summary. steamid {steamid}", exc_info=True)
-        return None
-    if user_info.status_code != 200:
-        logger.warning(f"Encountered a caught exception while trying to get user's profile summary. Response is not 200. steamid {steamid}", exc_info=True)
-        return None
-    else:
+    if not is_test:
         try:
-            user_info = user_info.json()
-            user_info = user_info["response"]["players"]
-
-            if user_info == []:  # Check if user exists
-                return None
-            user_info = user_info[0]
-
-            return {
-            "user_name": user_info["personaname"], 
-            "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""
-            )}
+            user_info = requests.get("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/", 
+            params={"key": steam_api_key, "steamids": str(steamid)})
         except Exception:
-            logger.warning(f"Encountered a caught exception while tryting to exctract avatar & user_name \
-            (unknown format of the returned api response?). steamid {steamid}", exc_info=True)
+            logger.warning(f"Encountered a caught exception while trying to get user's profile summary. steamid {steamid}", exc_info=True)
             return None
+        if user_info.status_code != 200:
+            logger.warning(f"Encountered a caught exception while trying to get user's profile summary. Response is not 200. steamid {steamid}", exc_info=True)
+            return None
+        user_info = user_info.json()
+    else:
+        user_info = steam_user_name_and_avatar_raw_response
+    try:
+        user_info = user_info["response"]["players"]
+
+        if user_info == []:  # Check if user exists
+            return None
+        user_info = user_info[0]
+
+        return {
+        "user_name": user_info["personaname"], 
+        "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""
+        )}
+    except Exception:
+        logger.warning(f"Encountered a caught exception while tryting to exctract avatar & user_name \
+        (unknown format of the returned api response?). steamid {steamid}", exc_info=True)
+        return None
 
 
 def get_user_hours_played(steamid):
@@ -138,35 +145,40 @@ def get_user_hours_played(steamid):
     Returns user's hours played as an int.
     Returns None if profile is private or user doesn't have Rust.
     """
-    try:
-        games_played = requests.get("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/", 
-        params={"key": steam_api_key, "steamid": str(steamid)})
-    except Exception:
-        logger.warning(f"Encountered a caught exception while trying to get user's hours played. steamid {steamid}", exc_info=True)
-        return None
-    if games_played.status_code != 200:
-        logger.debug(f"Encountered a caught exception while trying to get user's profile summary. Response is not 200. steamid {steamid}", exc_info=True)
-        return None
-    else:
+    if not is_test:
         try:
-            games_played = games_played.json()
-            games_played = games_played["response"]
-            if games_played is None:  # Profile is private
-                return None
-            
-            for game in games_played["games"]:
-                if game["appid"] == 252490:
-                    hours_played = int(game["playtime_forever"] / 60)
-                    return hours_played
-            return None
-            
+            games_played = requests.get("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/", 
+            params={"key": steam_api_key, "steamid": str(steamid)})
         except Exception:
-            logger.warning(f"Encountered a caught exception while tryting to exctract hours played \
-            (unknown format of the returned api response?). steamid {steamid}", exc_info=True)
+            logger.warning(f"Encountered a caught exception while trying to get user's hours played. steamid {steamid}", exc_info=True)
             return None
+        if games_played.status_code != 200:
+            logger.debug(f"Encountered a caught exception while trying to get user's profile summary. Response is not 200. steamid {steamid}", exc_info=True)
+            return None
+        games_played = games_played.json()
+    else:
+        games_played = steam_get_user_hours_raw_response
+    try:
+        games_played = games_played["response"]
+        if games_played is None:  # Profile is private
+            return None
+        
+        for game in games_played["games"]:
+            if game["appid"] == 252490:
+                hours_played = int(game["playtime_forever"] / 60)
+                return hours_played
+        return None
+        
+    except Exception:
+        logger.warning(f"Encountered a caught exception while tryting to exctract hours played \
+        (unknown format of the returned api response?). steamid {steamid}", exc_info=True)
+        return None
 
 
 def create_user_data(steamid):
+    """
+    Creates user model based on the Steam API data.
+    """
     logger.debug(f"Attempting to create user_data. steamid {steamid}")
     steamid = str(steamid)
     user_data = {}
@@ -200,16 +212,25 @@ def create_user_data(steamid):
     user_data["last_successful_update"] = timezone.now()
     user = User(**user_data)
     user.save()
+    return True
     logger.debug(f"While creating user_data, successfully created user and added said user to the database. steamid {steamid}")
 
 
 def update_user_model(user, new_data):
+    """
+    Updates user with **new_data dictionary.
+    Key is the name of model attribute and value is that model attribute's value.
+    {"model_attribute": new_value}
+    """
     for attribute_name in new_data:
         setattr(user, attribute_name, new_data[attribute_name])
     user.save()
 
 
 def update_user_data(user):
+    """
+    Update's user model with new data from Steam's API.
+    """
     logger.debug(f"Started updating user_data. user_id {user.user_id}")
     steamid = user.user_id
     user_data = {}

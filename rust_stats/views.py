@@ -25,6 +25,9 @@ def user_stats(request, user_id):
     show user a page with no stats. Then in the frontend download the data in a json
     format while showing a loading screen. When data is downloaded, render it on
     the screen.
+    Returns {"success": False} if failed to get user's stats when the user does 
+    not exist or the profile is private. Otherwise, returns {"success": True} +
+    **{user stats}.
     """
     logger.debug(f"Received a request for user_stats data for user_id {user_id}")
     try:
@@ -46,9 +49,10 @@ def user_stats(request, user_id):
                 last_attempted_update {last_attempted_update}")
                 update_user_data(user)
 
-    except ObjectDoesNotExist:
-        logger.debug(f"user_stats() caused a caught exception ObjectDoesNotExist. user_id {user_id}", exc_info=True)
-        create_user_data(str(user_id))
+    except Exception:
+        logger.debug(f"user_stats() caused a caught exception. user_id {user_id}", exc_info=True)
+        if create_user_data(str(user_id)) is None:
+            return JsonResponse({"success": False})
         user = User.objects.get(pk=user_id)
     # Convert model data into json response
     try:
