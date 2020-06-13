@@ -4,8 +4,9 @@ from django.db.models import Model, PositiveIntegerField, CharField, DateTimeFie
 class User(Model):
     """
     user_id - Steam64ID
-    user_name = user's steam name
-    avatar = user's profile picture in the format
+    user_name - user's steam name
+    hours_played - number of hours user has played Rust
+    avatar - user's profile picture in the format
     https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/<avatar>
     f7/f750a203f97fc5e3f21a06ce1d1fe574330ffe6f_full.jpg
 
@@ -20,6 +21,7 @@ class User(Model):
 
     user_id = CharField(max_length=20, primary_key=True, unique=True)
     user_name = CharField(max_length=32)
+    hours_played = PositiveIntegerField(default=0)
     avatar = CharField(max_length=100)
     last_successful_update = DateTimeField(blank=True, null=True)
     last_attempted_update = DateTimeField(auto_now=True)
