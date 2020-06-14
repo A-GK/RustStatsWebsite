@@ -1,18 +1,31 @@
 import json, logging
 from django.utils import timezone
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from .models import User
 from .user_data import create_user_data, update_user_data
 from django.shortcuts import render
+from django.contrib.auth import logout
 
 
 logger = logging.getLogger("rust_stats")
 
 
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+def my_profile(request):
+    try:
+        user_id = str(request.user.social_auth.get(provider='steam').uid)
+    except Exception:
+        return HttpResponseRedirect('/login/steam')
+    else:
+        return HttpResponseRedirect('/rust-stats/user/' + user_id)
+
 def index(request):
-    return HttpResponse("Index page")
+    return render(request, 'rust_stats/index.html')
 
 
 def user_profile(request, user_id):

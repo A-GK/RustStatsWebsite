@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os, sys
+from credentials import steam_api_key
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# TODO: Generate a new key and place it in credentials.py
 SECRET_KEY = 'c)_m#@e2)l4e#w-n(begab_-qpb*ajkos+lkc^-c=0tea673rv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -32,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rust_stats',
+    'social_django',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -160,7 +165,20 @@ if not 'test' in sys.argv:  # Disable logging during unit tests
             },
             'rust_stats': {
                 'handlers': ['rust_stats', 'console'],
-                'level': 'DEBUG',
+                'level': 'WARNING',
             }
         },
     }
+
+    
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.steam.SteamOpenId',
+)
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/my_profile'
+SOCIAL_AUTH_STEAM_API_KEY = steam_api_key
+# TODO: 
+# Once migrated to Postgresql, enable this field 
+# according to social-auth-app-django documentation
+# https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#database
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True

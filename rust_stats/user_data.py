@@ -1,7 +1,7 @@
 import requests, logging
 from sys import argv
 from django.utils import timezone
-from .credentials import steam_api_key
+from credentials import steam_api_key
 from .user_stats_names import user_stats_names_map
 from .models import User
 
@@ -196,7 +196,7 @@ def create_user_data(steamid):
         user = User(**user_data)
         user.save()
         logger.debug(f"While creating user_data, user_hours_played returned None. steamid {steamid}")
-        return None
+        return True
     user_data["hours_played"] = user_hours_played
     logger.debug(f"While creating user_data, successfully received user_hours_played. steamid {steamid}")
 
@@ -205,7 +205,7 @@ def create_user_data(steamid):
         logger.debug(f"While creating user_data, user_stats returned None. steamid {steamid}")
         user = User(**user_data)
         user.save()
-        return None
+        return True
 
     logger.debug(f"While creating user_data, successfully received user_stats. steamid {steamid}")
     user_data.update(user_stats)

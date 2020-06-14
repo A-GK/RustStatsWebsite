@@ -1,2 +1,4 @@
 Django==3.0.6
 requests==2.23.0
+social-auth-core==3.3.3
+social-auth-app-django==3.4.0
