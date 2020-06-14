@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from .models import User
 from .user_data import create_user_data, update_user_data
+from django.shortcuts import render
 
 
 logger = logging.getLogger("rust_stats")
@@ -15,7 +16,7 @@ def index(request):
 
 
 def user_profile(request, user_id):
-    return HttpResponse("user profile for id " + str(user_id))
+    return render(request, 'rust_stats/user_profile.html')
 
 
 def user_stats(request, user_id):
