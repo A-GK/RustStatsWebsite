@@ -3,10 +3,11 @@ from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
-from .models import User
-from .user_data import create_user_data, update_user_data
 from django.shortcuts import render
 from django.contrib.auth import logout
+from .forms import SearchUser
+from .models import User
+from .user_data import create_user_data, update_user_data
 
 
 logger = logging.getLogger("rust_stats")
@@ -16,6 +17,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
 def my_profile(request):
     try:
         user_id = str(request.user.social_auth.get(provider='steam').uid)
@@ -24,8 +26,19 @@ def my_profile(request):
     else:
         return HttpResponseRedirect('/rust-stats/user/' + user_id)
 
+
 def index(request):
-    return render(request, 'rust_stats/index.html')
+    if request.method == 'POST':
+        form = SearchUser(request.POST)
+        if form.is_valid():
+            try:
+                search_q = form.cleaned_data["search_q"]
+                return HttpResponseRedirect('/rust-stats/user/' + search_q)
+            except Exception:
+                return render(request, 'rust_stats/index.html', {'form': form})
+    else:
+        form = SearchUser()
+    return render(request, 'rust_stats/index.html', {'form': form})
 
 
 def user_profile(request, user_id):

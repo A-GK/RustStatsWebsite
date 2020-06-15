@@ -5,3 +5,11 @@
 {% else %}
     <a href="{% url "social:begin" "steam" %}">Steam login</a><br>
 {% endif %}
+<br>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.search_q.errors}}
+    Search: {{form.search_q}}
+    <button type="submit">Submit</button>
+</form>

@@ -162,12 +162,14 @@ def get_user_hours_played(steamid):
         games_played = games_played["response"]
         if games_played is None:  # Profile is private
             return None
-        
-        for game in games_played["games"]:
-            if game["appid"] == 252490:
-                hours_played = int(game["playtime_forever"] / 60)
-                return hours_played
-        return None
+        try:
+            for game in games_played["games"]:
+                if game["appid"] == 252490:
+                    hours_played = int(game["playtime_forever"] / 60)
+                    return hours_played
+            return None
+        except Exception:
+            return None
         
     except Exception:
         logger.warning(f"Encountered a caught exception while tryting to exctract hours played \
@@ -261,3 +263,26 @@ def update_user_data(user):
     user_data["last_successful_update"] = timezone.now()
     update_user_model(user, user_data)
     logger.debug(f"While updating user_data, successfully updated user_data. user_id {user.user_id}")
+
+
+def resolve_vanity_url(vanity_url):
+    try:
+        user_info = requests.get("https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/", 
+        params={"key": steam_api_key, "vanityurl": vanity_url})
+    except Exception:
+        logger.warning(f"Encountered a caught exception while trying to resolve vanity url. vanity_url {vanity_url}", exc_info=True)
+        return None
+    if user_info.status_code != 200:
+        logger.warning(f"Encountered a caught exception while trying to resolve vanity url. Response code not 200. vanity_url {vanity_url}", exc_info=True)
+        return None
+    try:
+        user_info = user_info.json()
+        user_info = user_info["response"]
+
+        if user_info == [] or user_info["success"] == 42:  # Check if vanity url exists
+            return None
+        return user_info["steamid"]
+    except Exception:
+        logger.warning(f"Encountered a caught exception while trying to resolve vanity url \
+        (unknown format of the returned api response?). vanity_url {vanity_url}", exc_info=True)
+        return None
