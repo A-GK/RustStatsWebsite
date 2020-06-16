@@ -99,6 +99,7 @@ class User(Model):
     shotgun_bullets_hit_building = PositiveIntegerField(default=0)
     shotgun_bullets_hit_entities = PositiveIntegerField(default=0)
     shotgun_bullets_hit_player = PositiveIntegerField(default=0)
+    shotgun_bullets_hit_horse = PositiveIntegerField(default=0)
     shotguns_fired = PositiveIntegerField(default=0)
 
     wounded = PositiveIntegerField(default=0)
