@@ -91,7 +91,11 @@ def convert_stats_names(user_stats):
     """
     new_user_stats = {}
     for key, value in user_stats.items():
-        new_user_stats[user_stats_names_map[key]] = value
+        new_name = user_stats_names_map.get(key, None)
+        if new_name is None:
+            logger.warning(f"Encountered a new statistics value named {key}")
+            continue
+        new_user_stats[new_name] = value
     return new_user_stats
 
 

@@ -8,7 +8,14 @@
     </head>
     <body>
 
-        
+        {% if user.is_authenticated %}
+            Hello, {{ user }}. <br>
+            <a href="/my_profile">my profile</a><br>
+            <a href="/logout">Logout</a><br>
+        {% else %}
+            <a href="{% url "social:begin" "steam" %}">Steam login</a><br>
+        {% endif %}
+        <br>
         <div id="user-stats">
             <div v-if="!user">Loading animation</div>
             <div v-else-if="user.success">
