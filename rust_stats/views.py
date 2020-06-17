@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.shortcuts import render
 from django.contrib.auth import logout
+from django.db.models import F
 from .forms import SearchUser
 from .models import User
 from .user_data import create_user_data, update_user_data, get_top_rankings
@@ -84,9 +85,12 @@ def user_stats(request, user_id):
         user = User.objects.get(pk=user_id)
     # Convert model data into json response
     try:
+        user.views = F("views") + 1
+        user.save()
         user_data = serializers.serialize("json", [user])
         user_data = json.loads(user_data)
         user_data = user_data[0]["fields"]
+        del user_data["views"], user_data["is_banned"]
         user_data["success"] = True
     except Exception:
         logger.exception("An exception occurred while trying to get user_stats request and convert it into json")
