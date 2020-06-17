@@ -6,6 +6,8 @@ class User(Model):
     user_id - Steam64ID
     user_name - user's steam name
     hours_played - number of hours user has played Rust
+    is_banned - is user banned from being displayed in top rankings
+
     avatar - user's profile picture in the format
     https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/<avatar>
     f7/f750a203f97fc5e3f21a06ce1d1fe574330ffe6f_full.jpg
@@ -21,8 +23,8 @@ class User(Model):
 
     user_id = CharField(max_length=20, primary_key=True, unique=True)
     user_name = CharField(max_length=32)
-    hours_played = PositiveIntegerField(default=0)
     avatar = CharField(max_length=100)
+    hours_played = PositiveIntegerField(default=0)
     is_banned = BooleanField(default=False)
     last_successful_update = DateTimeField(blank=True, null=True)
     last_attempted_update = DateTimeField(auto_now=True)

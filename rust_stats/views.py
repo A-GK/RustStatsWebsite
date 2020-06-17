@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.contrib.auth import logout
 from .forms import SearchUser
 from .models import User
-from .user_data import create_user_data, update_user_data
+from .user_data import create_user_data, update_user_data, get_top_rankings
 
 
 logger = logging.getLogger("rust_stats")
@@ -28,6 +28,7 @@ def my_profile(request):
 
 
 def index(request):
+    top_users = get_top_rankings()
     if request.method == 'POST':
         form = SearchUser(request.POST)
         if form.is_valid():
@@ -35,10 +36,10 @@ def index(request):
                 search_q = form.cleaned_data["search_q"]
                 return HttpResponseRedirect('/rust-stats/user/' + search_q)
             except Exception:
-                return render(request, 'rust_stats/index.html', {'form': form})
+                return render(request, 'rust_stats/index.html', {'form': form, 'top': top_users})
     else:
         form = SearchUser()
-    return render(request, 'rust_stats/index.html', {'form': form})
+    return render(request, 'rust_stats/index.html', {'form': form, 'top': top_users})
 
 
 def user_profile(request, user_id):

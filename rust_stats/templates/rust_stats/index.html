@@ -13,3 +13,12 @@
     Search: {{form.search_q}}
     <button type="submit">Submit</button>
 </form>
+
+<br><br>
+<div>
+    <h1>Top rankings</h1><br>
+    <h2>Top hours played</h2>
+    {% for top_user in top.hours_played %}
+        <h3>Name: {{top_user.user_name}}. Hours played: {{top_user.hours_played}}</h3>
+    {% endfor %}
+</div>

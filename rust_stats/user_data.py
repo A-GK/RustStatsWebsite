@@ -1,9 +1,12 @@
 import requests, logging
 from sys import argv
+from cachetools import cached, TTLCache
 from django.utils import timezone
-from credentials import steam_api_key
-from .user_stats_names import user_stats_names_map
+from django.db.models import Max
 from .models import User
+from credentials import steam_api_key
+from .user_stats_names import user_stats_names_map, top_categories
+from datetime import datetime
 
 
 logger = logging.getLogger("rust_stats")
@@ -290,3 +293,33 @@ def resolve_vanity_url(vanity_url):
         logger.warning(f"Encountered a caught exception while trying to resolve vanity url \
         (unknown format of the returned api response?). vanity_url {vanity_url}", exc_info=True)
         return None
+
+
+def get_category_top_users(category, users):
+    """
+    Returns top <users> for <category>. Users can't be banned and had to have
+    their profile stats updated at least once.
+    """
+    try:
+        args = User.objects.filter(is_banned=False, last_successful_update__isnull=False)
+        args.aggregate(Max(category))
+        args.order_by(f"-{category}")
+        return list(args.values("user_id", "user_name", "avatar", category)[:users])
+    except Exception:
+        logger.exception(f"An error occurred when attempting to get_top_users. category {category}, users {users}")
+
+
+@cached(cache=TTLCache(maxsize=1024, ttl=300))
+def get_top_rankings():
+    """
+    Returns a dictionary of lists for the top users for categories 
+    mentioned in user_stats_names.top_categories.
+    Cached every 300 seconds (5 minutes).
+    """
+    top_rankings = {}
+    for category in top_categories:
+        top_users = get_category_top_users(category, 10)
+        if top_users:
+            top_rankings[category] = top_users
+    top_rankings["last_update"] = datetime.now()
+    return top_rankings
