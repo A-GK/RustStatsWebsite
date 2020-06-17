@@ -1,4 +1,4 @@
-from django.db.models import Model, PositiveIntegerField, CharField, DateTimeField
+from django.db.models import BooleanField, CharField, DateTimeField, Model, PositiveIntegerField
 
 
 class User(Model):
@@ -23,6 +23,7 @@ class User(Model):
     user_name = CharField(max_length=32)
     hours_played = PositiveIntegerField(default=0)
     avatar = CharField(max_length=100)
+    is_banned = BooleanField(default=False)
     last_successful_update = DateTimeField(blank=True, null=True)
     last_attempted_update = DateTimeField(auto_now=True)
 
