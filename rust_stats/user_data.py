@@ -309,7 +309,7 @@ def get_category_top_users(category, users):
         logger.exception(f"An error occurred when attempting to get_top_users. category {category}, users {users}")
 
 
-@cached(cache=TTLCache(maxsize=1024, ttl=300))
+@cached(cache=TTLCache(maxsize=1, ttl=300))
 def get_top_rankings():
     """
     Returns a dictionary of lists for the top users for categories 
@@ -321,5 +321,5 @@ def get_top_rankings():
         top_users = get_category_top_users(category, 10)
         if top_users:
             top_rankings[category] = top_users
-    top_rankings["last_update"] = datetime.now()
+    top_rankings["last_updated"] = datetime.now()
     return top_rankings
