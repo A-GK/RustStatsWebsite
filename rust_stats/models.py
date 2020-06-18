@@ -1,4 +1,4 @@
-from django.db.models import BooleanField, CharField, DateTimeField, Model, PositiveIntegerField
+from django.db.models import BooleanField, CharField, DateTimeField, ManyToManyField, Model, PositiveIntegerField
 
 
 class User(Model):
@@ -8,6 +8,7 @@ class User(Model):
     hours_played - number of hours user has played Rust
     views - number of times that user's profile was pulled up
     is_banned - is user banned from being displayed in top rankings
+    friends - ManyToMany relationship to other User models
 
     avatar - user's profile picture in the format
     https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/<avatar>
@@ -20,16 +21,20 @@ class User(Model):
     last_attempted_update - The last time there was an attempt to update
     user's profile. Includes failed and successful updates. Always
     updates when mode.save() is called.
+
+    friends_last_updated - The last time user's friend list was updated.
     """
 
     user_id = CharField(max_length=20, primary_key=True, unique=True)
     user_name = CharField(max_length=32)
+    friends = ManyToManyField("self", blank=True,)
     avatar = CharField(max_length=100)
     hours_played = PositiveIntegerField(default=0)
     views = PositiveIntegerField(default=0)
     is_banned = BooleanField(default=False)
     last_successful_update = DateTimeField(blank=True, null=True)
     last_attempted_update = DateTimeField(auto_now=True)
+    friends_last_updated = DateTimeField(blank=True, null=True)
 
     # User's stats
     arrows_fired = PositiveIntegerField(default=0)

@@ -8,7 +8,7 @@ from django.contrib.auth import logout
 from django.db.models import F
 from .forms import SearchUser
 from .models import User
-from .user_data import create_user_data, update_user_data, get_top_rankings
+from .user_data import create_user_data, update_user_data, get_top_rankings, update_tracked_friends
 
 
 logger = logging.getLogger("rust_stats")
@@ -90,10 +90,63 @@ def user_stats(request, user_id):
         user_data = serializers.serialize("json", [user])
         user_data = json.loads(user_data)
         user_data = user_data[0]["fields"]
-        del user_data["views"], user_data["is_banned"]
+        del user_data["views"], user_data["is_banned"], user_data["friends"]
         user_data["success"] = True
     except Exception:
         logger.exception("An exception occurred while trying to get user_stats request and convert it into json")
         return JsonResponse({"success": False})
     logger.debug(f"Successfully returning user_stats data for user_id {user_id}")
     return JsonResponse(user_data)
+
+
+def user_friends(request, user_id):
+    """
+    Returns a list of friends for <user_id> that are tracked on the website.
+    This function is executed after user_stats is returned.
+    """
+    logger.debug(f"Received a request for user_friends data for user_id {user_id}")
+    try:
+        user = User.objects.get(pk=user_id)
+        last_successful_update = user.last_successful_update
+        last_attempted_update = user.last_attempted_update
+        last_friends_update = user.friends_last_updated
+
+        # If last stats update was never and last friend update was more than 29 minutes ago then update
+        if last_successful_update is None:
+            if last_friends_update is None and last_attempted_update + timezone.timedelta(seconds=28) < timezone.now():
+                update_tracked_friends(user_id)
+            elif last_friends_update is None and last_friends_update is None:
+                pass
+            elif last_friends_update + timezone.timedelta(minutes=29) < timezone.now():
+                update_tracked_friends(user_id)
+        # If last stats update was less than 10 seconds ago and 
+        # (last friend update was never OR last friend update was more than 29 minutes ago) then update
+        elif timezone.now() < last_successful_update + timezone.timedelta(seconds=10):
+            if last_friends_update is None:
+                update_tracked_friends(user_id)
+            elif last_friends_update + timezone.timedelta(minutes=29) < timezone.now():
+                update_tracked_friends(user_id)
+                    
+    except Exception:
+        logger.exception(f"An exception occurred while trying to get user_friends request and convert it into json. user_id {user_id}")
+        return JsonResponse({"success": False})
+
+    friends_data = {"friends": []}
+    friend_list = []
+
+    try:
+        user = User.objects.get(pk=user_id)
+        friends = user.friends.all()
+        for friend in friends:
+            friend_list.append({
+                "user_id": friend.user_id,
+                "user_name": friend.user_name,
+                "avatar": friend.avatar,
+            })
+        friends_data["success"] = True
+        friends_data["friends"] = friend_list
+        friends_data["last_updated"] = user.friends_last_updated
+    except Exception:
+        logger.exception(f"An exception occurred while trying to convert user_friends into json. user_id {user_id}")
+        return JsonResponse({"success": False})
+    return JsonResponse(friends_data)

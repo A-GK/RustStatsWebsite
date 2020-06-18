@@ -323,3 +323,52 @@ def get_top_rankings():
             top_rankings[category] = top_users
     top_rankings["last_updated"] = datetime.now()
     return top_rankings
+
+
+def get_users_friends(user_id):
+    """Get a list of user's friends steam ids"""
+    try:
+        user_info = requests.get("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/", 
+        params={"key": steam_api_key, "steamid": user_id, "relationship": "friend"})
+    except Exception:
+        logger.warning(f"Encountered a caught exception while trying to get user's friends. user_id {user_id}", exc_info=True)
+        return []
+    if user_info.status_code != 200:
+        logger.info(f"Encountered a caught exception while trying to get user's friends. Response code is not 200. user_id {user_id}", exc_info=True)
+        return []
+    try:
+        user_info = user_info.json()
+
+        if user_info == {}:
+            return []
+        user_info = user_info["friendslist"]["friends"]
+        friend_list = []
+        for friend in user_info:
+            friend_list.append(friend["steamid"])
+        return friend_list
+    except Exception:
+        logger.warning(f"Encountered a caught exception while trying to get user's friends \
+        (unknown format of the returned api response?). user_id {user_id}", exc_info=True)
+        return []
+
+
+def update_tracked_friends(user_id):
+    """Set friends of the user that are tracked on this website."""
+    try:
+        user = User.objects.get(pk=user_id)
+    except Exception:
+        return
+
+    tracked_friends = []
+    friend_list = get_users_friends(user_id)
+    if friend_list != []:
+        for friend in friend_list:
+            try:
+                tracked_player = User.objects.get(pk=friend)
+                tracked_friends.append(tracked_player)
+            except Exception:
+                pass
+        # Clears <friends> relations and then sets them to new relations
+        user.friends.set(tracked_friends, clear=True)
+    user.friends_last_updated = timezone.now()
+    user.save()

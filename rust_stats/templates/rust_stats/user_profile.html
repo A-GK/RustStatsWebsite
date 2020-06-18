@@ -27,6 +27,19 @@
         </div>
 
 
+        <div id="user-friends">
+            {% comment %} <div v-if="!user">Loading animation</div>
+            <div v-else-if="user.success">
+                <h1>User name: !{ user.user_name }</h1>
+                <h2>Hours played: !{ user.hours_played }</h2>
+                <img :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + user.avatar">
+            </div>
+            <div v-else>User does not exist or has never played Rust!</div> {% endcomment %}
+
+
+        </div>
+
+
         <script type="text/javascript" src="{% static 'rust_stats/js/user_profile_render.js' %}"></script>
     </body>
 </html>
