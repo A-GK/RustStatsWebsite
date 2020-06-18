@@ -137,10 +137,14 @@ def get_user_name_and_avatar(steamid):
             return None
         user_info = user_info[0]
 
-        return {
+        user_data = {
         "user_name": user_info["personaname"], 
-        "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""
-        )}
+        "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""),
+        }
+        account_created = user_info.get("timecreated", None)
+        if account_created:
+            user_data["account_created"] = timezone.make_aware(datetime.fromtimestamp(account_created), timezone.get_current_timezone())
+        return user_data
     except Exception:
         logger.warning(f"Encountered a caught exception while tryting to exctract avatar & user_name \
         (unknown format of the returned api response?). steamid {steamid}", exc_info=True)

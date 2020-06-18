@@ -9,6 +9,7 @@ class User(Model):
     views - number of times that user's profile was pulled up
     is_banned - is user banned from being displayed in top rankings
     friends - ManyToMany relationship to other User models
+    account_created - the time when user's profile was created
 
     avatar - user's profile picture in the format
     https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/<avatar>
@@ -27,8 +28,9 @@ class User(Model):
 
     user_id = CharField(max_length=20, primary_key=True, unique=True)
     user_name = CharField(max_length=32)
-    friends = ManyToManyField("self", blank=True,)
+    friends = ManyToManyField("self", blank=True)
     avatar = CharField(max_length=100)
+    account_created = DateTimeField(null=True, default=None)
     hours_played = PositiveIntegerField(default=0)
     views = PositiveIntegerField(default=0)
     is_banned = BooleanField(default=False)
