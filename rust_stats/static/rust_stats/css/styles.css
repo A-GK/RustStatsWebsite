@@ -421,9 +421,6 @@ body {
   background-color: #1C213E;
 }
 
-.card-stats {
-}
-
 .stats-row {
   margin: 0px;
   padding-top: 5px;
@@ -457,7 +454,6 @@ body {
 
 .profile-search:focus {
   outline: 3px solid #434c81;
-  /*border-radius: 0px;*/
 }
 
 .inner-addon {
@@ -489,7 +485,6 @@ body {
 .profile-search {
   color: rgb(255,255,255);
   border-width: 0px;
-  /*margin-bottom: 1.6em;*/
   padding: 0.3em 5px;
   padding-left: 2em;
 }
@@ -509,9 +504,6 @@ body {
   background-color: #262C4E;
   padding: 0.5em;
   padding-left: 0em;
-}
-
-.img-thumbnail {
 }
 
 .friend-name {
@@ -540,6 +532,7 @@ body {
 .scrollbar-primary::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-color: #4285F4;
 }
 
@@ -551,13 +544,11 @@ body {
   margin: initial;
   overflow-y: auto;
   max-height: 23em;
-  /*background: #262c4e;*/
 }
 
 .scrollbar::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  /*border-radius: 10px;*/
-  /*background-color: #262c4e;*/
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -568,6 +559,7 @@ body {
 .scrollbar::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
   background-color: #2b335b;
 }
 
@@ -613,13 +605,8 @@ body::-webkit-scrollbar-thumb {
   font-size: 1.5em;
 }
 
-.leaderboard-position {
-}
-
 @media (min-width: 768px) {
   .leaderboard-position {
-    /*flex: 0 0 33.33333%;*/
-    /*max-width: 33.33333%;*/
     margin-top: auto;
     margin-bottom: auto;
   }
