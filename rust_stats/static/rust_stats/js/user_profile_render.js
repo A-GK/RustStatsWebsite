@@ -1,36 +1,107 @@
-var displayFriends = new Vue({
-    el: '#user-friends',
-    delimiters: ['!{', '}'], // Because Django is using {{ }}
+function shuffleArray(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+
+function hideElementById(elementId) {
+    document.getElementById(elementId).classList.add("hide");
+}
+
+
+var userStats = new Vue({
+    el: '#user-stats',
+    delimiters: ['!{', '}'],  // Django uses {{ }}
     data: {
-      friends: null,
+        steamid: window.location.pathname.replace("/rust-stats/user/", ""),
+        user: null,
+        friends: null,
+        last_update: null,
+        last_attempt: null,
+        isSearchActive: false,
+        friendsNum: 0,
+        // Variables that are seconds and should be formatted differently
+        time_variables: ["cold_exposure_duration", "comfort_exposure_duration", "overheated_exposure_duration", "radiation_exposure_duration", "voice_chat_seconds"],
     },
+
     methods: {
         getFriends: function () {
             // Load user friends and set <friends> with the response
-            var _this = this;
-            var steamid = window.location.pathname.replace("/rust-stats/user/", "");
-            $.getJSON('/rust-stats/user-friends/' + steamid, function (json) {
+            var _this = this;  // because => function binds this to itself
+            $.getJSON('/rust-stats/user-friends/' + _this.steamid, function (json) {
                 _this.friends = json;
+                _this.friends.friends = shuffleArray(json.friends);
+                _this.friendsNum = json.friends.length;
             });
-        }
-    }
-})
+        },
 
+        addSpecialVariables: function () {
+            if (this.user.account_created){
+                this.user.account_created = moment(this.user.account_created).format("LL");
+            } else {
+                this.user.account_created = "Private";
+            }
+            if (this.user.hours_played == 0){
+                this.user.hours_played = "Private"
+            }
+            this.last_attempt = moment.duration(moment().diff(this.user.last_attempted_update)).humanize({ss:1});
+            this.last_update = moment.duration(moment().diff(this.user.last_successful_update)).humanize();
 
+            // Was profile ever public and we have a record of it but now is private
+            this.wasPublicIsPrivate = moment.duration(moment().diff(userStats.user.last_successful_update)).asMinutes() > 30;
 
-var displayStats = new Vue({
-    el: '#user-stats',
-    delimiters: ['!{', '}'],
-    data: {
-      user: null,
+            this.user.KDR = Math.round(this.user.kill_players / this.user.deaths * 100)/100;
+            this.user.bullets_hit_players_percentage = Math.round(this.user.bullets_hit_players / this.user.bullets_fired * 10000) / 100 + "%"
+            this.user.headshot_percentage = Math.round(this.user.headshots / this.user.bullets_hit_players * 10000) / 100 + "%"
+            this.user.horse_distance_ridden_mi = Math.round(this.user.horse_distance_ridden_km / 1.609);
+        },
+
+        formatVariables: function () {
+            // Format variables into a more human friendly manner, adds commas and time units
+            var _this = this; // because => function binds 'this' to itself
+            Object.keys(_this.user).forEach(function(key) {
+                // console.log(key, _this.user[key]);
+                if (Number.isInteger(_this.user[key])){ 
+                    if (_this.time_variables.includes(key)) {
+                            _this.user[key] = moment.duration(_this.user[key], "seconds").humanize({h:99999});
+                            return;
+                    }
+                    if (_this.user[key] > 999999) {  // > 999,999
+                        _this.user[key] = numeral(_this.user[key]).format('0.00a');
+                    } else if (_this.user[key] > 99999) { // > 99,999
+                        _this.user[key] = numeral(_this.user[key]).format('0.0a');
+                    } else {
+                        _this.user[key] = numeral(_this.user[key]).format('0,0');
+                    }
+                }
+            });
+        },
     },
+
     created: function () {
         // Load user stats and set <user> with the response
-        var _this = this;
-        var steamid = window.location.pathname.replace("/rust-stats/user/", "");
-        $.getJSON('/rust-stats/user-stats/' + steamid, function (json) {
-            _this.user = json;
-            displayFriends.getFriends();
+        var _this = this;  
+        $.getJSON('/rust-stats/user-stats/' + _this.steamid, function (json) {
+            _this.user = json; 
+
+            _this.addSpecialVariables();
+            _this.formatVariables();
+            hideElementById("animation-cover");
+            if (json.success){
+                // If the profile was never seen before then it won't have user's name in the title
+                // so we do it in here
+                document.title = json.user_name + "'s Rust Stats | View anyone's Rust stats"
+                _this.getFriends();
+            } else {
+                hideElementById("footer-disclaimers");
+            }
+
         });
     }
 })

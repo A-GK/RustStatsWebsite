@@ -6,7 +6,6 @@ class User(Model):
     user_id - Steam64ID
     user_name - user's steam name
     hours_played - number of hours user has played Rust
-    views - number of times that user's profile was pulled up
     is_banned - is user banned from being displayed in top rankings
     friends - ManyToMany relationship to other User models
     account_created - the time when user's profile was created
@@ -32,7 +31,6 @@ class User(Model):
     avatar = CharField(max_length=100)
     account_created = DateTimeField(null=True, default=None)
     hours_played = PositiveIntegerField(default=0)
-    views = PositiveIntegerField(default=0)
     is_banned = BooleanField(default=False)
     last_successful_update = DateTimeField(blank=True, null=True)
     last_attempted_update = DateTimeField(auto_now=True)

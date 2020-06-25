@@ -1,45 +1,236 @@
+{% extends "rust_stats/base.html" %}
 {% load static %}
-<html>
-    <head>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js" integrity="sha384-+jvb+jCJ37FkNjPyYLI3KJzQeD8pPFXUra3B/QJFqQ3txYrUPIP1eOfxK4h3cKZP" crossorigin="anonymous"></script>
-        <!-- TODO: Minify the vue link once development is done -->
-        <!--- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha384-OZmxTjkv7EQo5XDMPAmIkkvywVeXw59YyYh6zq8UKfkbor13jS+5p8qMTBSA1q+F" crossorigin="anonymous"></script> -->
-    </head>
-    <body>
 
-        {% if user.is_authenticated %}
-            Hello, {{ user }}. <br>
-            <a href="/my_profile">my profile</a><br>
-            <a href="/logout">Logout</a><br>
-        {% else %}
-            <a href="{% url "social:begin" "steam" %}">Steam login</a><br>
-        {% endif %}
-        <br>
-        <div id="user-stats">
-            <div v-if="!user">Loading animation</div>
-            <div v-else-if="user.success">
-                <h1>User name: !{ user.user_name }</h1>
-                <h2>Hours played: !{ user.hours_played }</h2>
-                <img :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + user.avatar">
+
+{% block header_scripts %}
+<!-- TODO: Minify the vue link once development is done -->
+<!--- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" integrity="sha384-OZmxTjkv7EQo5XDMPAmIkkvywVeXw59YyYh6zq8UKfkbor13jS+5p8qMTBSA1q+F" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js" integrity="sha384-+jvb+jCJ37FkNjPyYLI3KJzQeD8pPFXUra3B/QJFqQ3txYrUPIP1eOfxK4h3cKZP" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block title %}{{title}}{% endblock %}
+
+
+{% block header_content %}
+{% include "rust_stats/loading_animation.html" %}
+{% endblock %}
+
+{% block content %}
+
+
+
+<div>
+    <div class="row" id="user-stats">
+
+        <div class="col d-block d-md-none search-mobile search-box">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.search_q.errors|striptags }}
+                <div class="inner-addon left-addon"><i class="fas fa-search"></i>
+                    <input @focus="isSearchActive = true" @blur="isSearchActive = false" required name="search_q" autocomplete="off" type="search" class="profile-search searchDesktop" placeholder="Search profiles">
+                </div>
+                <transition name="slide-fade">
+                    <div v-show="isSearchActive" class="bg-primary search-examples">
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>gabelogannewell</span></div>
+                    </div>
+                </transition>
+            </form>
+
+        </div>
+        <div v-if="user && user.success" class="col col-12 col-sm-12 col-md-4 col-lg-3" id="user-details">
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-truncate profile-user-name">!{user.user_name}&nbsp;</h3>
+                    <img class="img-fluid w-100" :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + user.avatar">
+                    <a :href="`https://steamcommunity.com/profiles/` + steamid" target="_blank">
+                        <div class="bg-secondary text-white view-external">
+                            <i class="fab fa-steam" style="margin-right: 6px;font-size: 21px;"></i>View on Steam
+                        </div>
+                    </a>
+                </div>
             </div>
-            <div v-else>User does not exist or has never played Rust!</div>
+            <div id="update-notice" class="bg-secondary">
+                <span v-if="last_update == 'Invalid date'">Never Updated</span>
+                <span v-else>Updated !{last_update} ago</span>
+            </div>
+
+            
+            <div class="row">
+                <div class="col">
+                    <div class="bg-secondary friends-label">
+                        <span v-if="friends && friends.success && !(friendsNum == 0)">!{friendsNum} Friend!{friendsNum == 1 ? "" : "s"} on RustStats</span>
+                        <span v-else-if="!friends">Loading friends...</span>
+                        <span v-else>No friends on RustStats</span>
+                    </div>
+                    <div v-if="friends && friends.success && !(friendsNum == 0)" class="overflow-auto scrollbar">
+                        
+                        
+                        <div v-for="friend in friends.friends" class="row friends-row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col col-3 col-md-4">
+                                        <a :href="`/rust-stats/user/` + friend.user_id" class="a-friend">
+                                            <img class="img-fluid" :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + friend.avatar">
+                                        </a>
+                                    </div>
+                                    <div class="col friend-name col-9 col-md-8">
+                                        <a :href="`/rust-stats/user/` + friend.user_id" class="a-friend">
+                                            <div class="text-truncate"><span>!{friend.user_name}</span></div>
+                                            <div v-if="friend.hours_played && !friend.hours_played == 0" class="friends-hours"><span class="text-truncate">!{friend.hours_played} hours</span></div>
+                                            <div v-else class="friends-hours"><span class="text-truncate">Private hours</span></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div v-if="user && user.success" class="col">
+
+            <div class="row d-none d-md-block search-box">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="col" class="search-box">
+                        {{ form.search_q.errors|striptags }}
+                        <div class="inner-addon left-addon"><i class="fas fa-search"></i>
+                            <input @focus="isSearchActive = true" @blur="isSearchActive = false" required name="search_q" autocomplete="off" type="search" class="profile-search" placeholder="Search by pasting link to a profile or login with Steam">
+                        </div>
+                        <transition name="slide-fade">
+                            <div v-show="isSearchActive" class="bg-primary search-examples">
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>gabelogannewell</span></div>
+                            </div>
+                        </transition>
+                    </div>
+                </form>
+            </div>
+
+            
+            <div v-if="wasPublicIsPrivate" class="row stats-card">
+                <div class="col">
+                    <div class="bg-secondary card-name stats-text"><i class="fas fa-exclamation-triangle text-warning" style="margin-right: 8px;"></i><span class="text-warning">Private Profile</span><span class="float-right d-none d-sm-block">Updated !{last_update} ago</span></div>
+                    <div class="row stats-row">
+                        <div class="col card-name stats-text">
+                            <p>This profile is now private but we have a record of it from !{last_update} ago. Please <a href="https://steamcommunity.com/id/profile/edit/settings" target="_blank" style="text-decoration: underline;">set it to public</a>. Refresh the page in 2-5 minutes to see the updated stats. Last attempted update was !{last_attempt} ago.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="!user.last_successful_update" class="row stats-card">
+
+                <div class="col col-12">
+                    <div class="bg-secondary card-name stats-text"><i class="fas fa-exclamation-triangle text-danger" style="margin-right: 8px;"></i><span
+                            class="text-danger">Private Profile</span><span class="float-right d-none d-lg-block">Attempted to update !{last_attempt} ago</span></div>
+                    <div class="row stats-row">
+                        <div class="col card-name stats-text">
+                            <p>This profile is private or has never played Rust. Please <a href="https://steamcommunity.com/id/profile/edit/settings" target="_blank" style="text-decoration: underline;">set it to public</a> and refresh the page in 2-5 minutes to see your stats.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row stats-card">
+
+                <div class="col">
+                    <div class="bg-secondary card-name stats-text"><span>Profile Overview</span></div>
+                    <div class="row stats-row">
+                        <div class="col card-stats stats-text col-12 col-lg-6">
+                            <div class="card-content">
+                                <div class="stats-heading stats-heading-large"><span>Hours Played</span></div>
+                                <div class="stats-value stats-value-large"><span>!{user.hours_played}</span></div>
+                            </div>
+                        </div>
+                        <div class="col card-stats stats-text col-12 col-lg-6">
+                            <div class="card-content">
+                                <div class="stats-heading stats-heading-large"><span>Account Created</span></div>
+                                <div class="stats-value stats-value-large"><span>!{user.account_created}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="user.last_successful_update" class="row">
+
+                {% for category in categories %}
+                    {% if category.isWide %}
+                            <div class="col col-12 stats-card">
+                                <div class="bg-secondary card-name stats-text"><span>{{ category.topic }}</span></div>
+
+                                <div class="row stats-row">
+                                    {% for stats_unit in category.stats %}
+                                    <div class="col card-stats stats-text col-6 col-lg-3">
+                                        <div class="card-content">
+                                            <div class="stats-heading"><span>{{ stats_unit.verbose_name }}</span></div>
+                                            <div class="stats-value"><span>{{ stats_unit.value }}</span></div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    {% else %}
+                        <div class="col col-12 col-lg-6 left-column double-column">
+                            <div class="bg-secondary card-name stats-text"><span>{{ category.topic }}</span></div>
+                            <div class="row stats-row">
+                                {% for stats_unit in category.stats %}
+                                <div class="col card-stats stats-text col-6">
+                                    <div class="card-content">
+                                        <div class="stats-heading"><span>{{ stats_unit.verbose_name }}</span></div>
+                                        <div class="stats-value"><span>{{ stats_unit.value }}</span></div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
 
 
-        <div id="user-friends">
-            {% comment %} <div v-if="!user">Loading animation</div>
-            <div v-else-if="user.success">
-                <h1>User name: !{ user.user_name }</h1>
-                <h2>Hours played: !{ user.hours_played }</h2>
-                <img :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + user.avatar">
-            </div>
-            <div v-else>User does not exist or has never played Rust!</div> {% endcomment %}
-
-
+        <div v-if="user && !user.success" class="col col-12">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row d-none d-md-block search-box">
+                    <div class="col" class="search-box">
+                        {{ form.search_q.errors|striptags }}
+                        <div class="inner-addon left-addon"><i class="fas fa-search"></i>
+                            <input @focus="isSearchActive = true" @blur="isSearchActive = false" required name="search_q" autocomplete="off" type="search" class="profile-search" placeholder="Search by pasting link to a profile or login with Steam">
+                        </div>
+                        <transition name="slide-fade">
+                            <div v-show="isSearchActive" class="bg-primary search-examples">
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
+                                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>gabelogannewell</span></div>
+                            </div>
+                        </transition>
+                    </div>
+                </div>
+            </form>
         </div>
 
+        <div v-if="user && !user.success" class="col col-12 text-center error-description-small">
+            <span>User does not exist or has never played Rust</span>
+        </div>
+    </div>
+</div>
 
-        <script type="text/javascript" src="{% static 'rust_stats/js/user_profile_render.js' %}"></script>
-    </body>
-</html>
+{% endblock %}
+
+
+
+{% block footer_scripts %}
+<script type="text/javascript" src="{% static 'rust_stats/js/user_profile_render.js' %}"></script>
+{% endblock %}

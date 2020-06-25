@@ -3,7 +3,7 @@ from .user_data import resolve_vanity_url
 import re
 
 
-steam_url_regex = r"(?:https?:\/\/)?steamcommunity\.com\/((?:profiles|id))\/([a-zA-Z0-9]+)"
+steam_url_regex = r"(?:https?:\/\/)?steamcommunity\.com\/((?:profiles|id))\/([a-zA-Z0-9-_]+)"
 steam_uid_regex = r"^([a-zA-Z0-9-_]+)$"
 steam_steam_64_id_regex = r"^([0-9]+)$"
 error_msg = "Error! Please enter full link to a Steam profile, or the Steam id."

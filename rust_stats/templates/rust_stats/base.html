@@ -1,0 +1,64 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}RustStats - View anyone's rust stats{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'rust_stats/bootstrap/css/bootstrap.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha256-ZsWP0vT+akWmvEMkNYgZrPHKU9Ke8nYBPC3dqONp1mY=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js" integrity="sha256-LlHVI5rUauudM5ZcZaD6hHPHKrA7CSefHHnKgq+/AZc=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'rust_stats/css/styles.css' %}">
+    {% block header_scripts %}{% endblock %}
+    {% block header_content %}{% endblock %}
+</head>
+
+<body class="text-white d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-light navbar-expand-md">
+        <div class="container"><a class="navbar-brand" href="/">RustStats</a>
+        <button data-toggle="collapse" class="navbar-toggler text-white" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><i class="fas fa-bars"></i></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#">Discord Bot</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#">Skins Stats</a></li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="/my_profile">My Profile</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="/logout">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="{% url 'social:begin' 'steam' %}">Login with Steam</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div>
+        <div class="container">
+            {% block content %}{% endblock %}
+            {% block footer %}
+            <footer class="footer">
+                <div class="row" id="footer-disclaimers">
+                    <div class="col col-12 col-md-6 site-info"><span>Privacy Policy | Cookie Policy</span></div>
+                    <div class="col col-12 col-md-6 d-none d-md-block site-info" id="discord-desktop"><span class="float-right">Join our discord server if you have suggestions/feedback</span></div>
+                    <div class="col col-12 col-md-6 d-block d-md-none site-info" id="discord-mobile"><span>Join our discord server if you have suggestions/feedback</span></div>
+                    <div class="col" id="other-disclaimers"><span>Statistics are provided by Steam. These stats are only tracked on official servers and can be inaccurate. Intentional abuse of the stats system will lead to a profile ban.<br></span><span>Steam is a registered trademark of Valve. Valve has not endorsed and is not responsible for this site or its content.<br></span><span>Rust is a registered trademark of Facepunch. Game materials copyright Facepunch. Facepunch has not endorsed and is not responsible for this site or its content.<br></span><span>Trademarks are the property of their respective owners.</span></div>
+                </div>
+            </footer>
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block footer_scripts %}{% endblock %}
+    <script src="{% static 'rust_stats/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+
+</html>
