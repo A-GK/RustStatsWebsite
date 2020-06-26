@@ -7,7 +7,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>{% block title %}RustStats - View anyone's rust stats{% endblock %}</title>
+    <title>{% block title %}RustStats - View anyone's Rust stats{% endblock %}</title>
+    <link rel="preconnect" href="https://steamcdn-a.akamaihd.net">
     <link rel="stylesheet" href="{% static 'rust_stats/bootstrap/css/bootstrap.min.css' %}">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha256-ZsWP0vT+akWmvEMkNYgZrPHKU9Ke8nYBPC3dqONp1mY=" crossorigin="anonymous"></script>
@@ -25,8 +26,8 @@
             <div class="collapse navbar-collapse"
                 id="navcol-1">
                 <ul class="nav navbar-nav">
-                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#">Discord Bot</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#">Skins Stats</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#" target="_blank">Discord Bot</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="https://skinsdelta.com/rust/">Skins Stats</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
                     {% if user.is_authenticated %}
@@ -50,7 +51,7 @@
                     <div class="col col-12 col-md-6 site-info"><span>Privacy Policy | Cookie Policy</span></div>
                     <div class="col col-12 col-md-6 d-none d-md-block site-info" id="discord-desktop"><span class="float-right">Join our discord server if you have suggestions/feedback</span></div>
                     <div class="col col-12 col-md-6 d-block d-md-none site-info" id="discord-mobile"><span>Join our discord server if you have suggestions/feedback</span></div>
-                    <div class="col" id="other-disclaimers"><span>Statistics are provided by Steam. These stats are only tracked on official servers and can be inaccurate. Intentional abuse of the stats system will lead to a profile ban.<br></span><span>Steam is a registered trademark of Valve. Valve has not endorsed and is not responsible for this site or its content.<br></span><span>Rust is a registered trademark of Facepunch. Game materials copyright Facepunch. Facepunch has not endorsed and is not responsible for this site or its content.<br></span><span>Trademarks are the property of their respective owners.</span></div>
+                    <div class="col" id="other-disclaimers"><span>Statistics are provided by Steam. These stats are only tracked on servers under the "Official Servers" tab. Intentional abuse of the stats system will lead to a profile ban.<br></span><span>Steam is a registered trademark of Valve. Valve has not endorsed and is not responsible for this site or its content.<br></span><span>Rust is a registered trademark of Facepunch. Game materials copyright Facepunch. Facepunch has not endorsed and is not responsible for this site or its content.<br></span><span>Trademarks are the property of their respective owners.</span></div>
                 </div>
             </footer>
             {% endblock %}

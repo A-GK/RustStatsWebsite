@@ -31,6 +31,7 @@
                 </div>
                 <transition name="slide-fade">
                     <div v-show="isSearchActive" class="bg-primary search-examples">
+                        <div class="col text-truncate"><span>Search examples:</span></div>
                         <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
                         <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
                         <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
@@ -68,23 +69,21 @@
                     <div v-if="friends && friends.success && !(friendsNum == 0)" class="overflow-auto scrollbar">
                         
                         
-                        <div v-for="friend in friends.friends" class="row friends-row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col col-3 col-md-4">
-                                        <a :href="`/rust-stats/user/` + friend.user_id" class="a-friend">
+                        <div v-for="friend in friends.friends" class="row friends-row hover-dim bg-primary">
+                            <a :href="`/rust-stats/user/` + friend.user_id" class="a-friend">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col col-3 col-md-4">
                                             <img class="img-fluid" :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + friend.avatar">
-                                        </a>
-                                    </div>
-                                    <div class="col friend-name col-9 col-md-8">
-                                        <a :href="`/rust-stats/user/` + friend.user_id" class="a-friend">
+                                        </div>
+                                        <div class="col friend-name col-9 col-md-8">
                                             <div class="text-truncate"><span>!{friend.user_name}</span></div>
                                             <div v-if="friend.hours_played && !friend.hours_played == 0" class="friends-hours"><span class="text-truncate">!{friend.hours_played} hours</span></div>
                                             <div v-else class="friends-hours"><span class="text-truncate">Private hours</span></div>
-                                        </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -105,6 +104,7 @@
                         </div>
                         <transition name="slide-fade">
                             <div v-show="isSearchActive" class="bg-primary search-examples">
+                                <div class="col text-truncate"><span>Search examples:</span></div>
                                 <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
                                 <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
                                 <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
@@ -210,6 +210,7 @@
                         </div>
                         <transition name="slide-fade">
                             <div v-show="isSearchActive" class="bg-primary search-examples">
+                                <div class="col text-truncate"><span>Search examples:</span></div>
                                 <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
                                 <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
                                 <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>

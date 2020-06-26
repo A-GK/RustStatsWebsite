@@ -299,16 +299,45 @@ def resolve_vanity_url(vanity_url):
         return None
 
 
+def get_human_number_format(num):
+    if num > 999999:
+        round_to = 2
+    elif num > 99999:
+        round_to = 1
+    else:
+        return '{:,}'.format(int(num))
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num = round(num / 1000.0, round_to)
+    return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'k', 'm', 'b', 't', 'p'][magnitude])
+
+
+def get_human_time_format(num):
+    return num / 3600
+
+
 def get_category_top_users(category, users):
     """
     Returns top <users> for <category>. Users can't be banned and had to have
     their profile stats updated at least once.
     """
     try:
-        args = User.objects.filter(is_banned=False, last_successful_update__isnull=False)
-        args.aggregate(Max(category))
-        args.order_by(f"-{category}")
-        return list(args.values("user_id", "user_name", "avatar", category)[:users])
+        args = User.objects.filter(is_banned=False, last_successful_update__isnull=False).order_by(f"-{category}")[:users]
+        top_users = list(args.values("user_id", "user_name", "avatar", category))
+        for top_user in top_users:
+            top_user["top_value"] = top_user.pop(category)
+        if [ele for ele in ["duration", "second"] if(ele in category)]:
+            for top_user in top_users:
+                top_user["top_value"] = top_user["top_value"] / 3600  # Get hours instead of seconds
+                top_user["top_value"] = get_human_number_format(top_user["top_value"])
+                top_user["top_value"] = top_user["top_value"] + " hours"
+
+        else:
+            for top_user in top_users:
+                top_user["top_value"] = get_human_number_format(top_user["top_value"])
+                
+        return top_users
     except Exception:
         logger.exception(f"An error occurred when attempting to get_top_users. category {category}, users {users}")
 
@@ -322,10 +351,9 @@ def get_top_rankings():
     """
     top_rankings = {}
     for category in top_categories:
-        top_users = get_category_top_users(category, 10)
+        top_users = get_category_top_users(category[0], 25)
         if top_users:
-            top_rankings[category] = top_users
-    top_rankings["last_updated"] = datetime.now()
+            top_rankings[category[1]] = top_users
     return top_rankings
 
 

@@ -1,3 +1,15 @@
+.no-padding {
+	padding: 0px 0px;
+}
+
+.no-link-underline:hover {
+	text-decoration: none;
+}
+
+.hover-dim:hover {
+	filter: brightness(90%);
+}
+
 .profile-user-name {
 	padding-bottom: 0.15em;
 }
@@ -685,6 +697,7 @@ body::-webkit-scrollbar-thumb {
 
 #other-disclaimers {
   margin-top: 0.7em;
+  margin-bottom: 0.7em;
 }
 
 .search-box {

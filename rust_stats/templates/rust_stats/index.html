@@ -1,24 +1,58 @@
-{% if user.is_authenticated %}
-    Hello, {{ user }}. <br>
-    <a href="/my_profile">my profile</a><br>
-    <a href="/logout">Logout</a><br>
-{% else %}
-    <a href="{% url "social:begin" "steam" %}">Steam login</a><br>
-{% endif %}
-<br>
+{% extends "rust_stats/base.html" %}
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{form.search_q.errors}}
-    Search: {{form.search_q}}
-    <button type="submit">Submit</button>
-</form>
 
-<br><br>
-<div>
-    <h1>Top rankings</h1><br>
-    <h2>Top hours played</h2>
-    {% for top_user in top.hours_played %}
-        <h3>Name: {{top_user.user_name}}. Hours played: {{top_user.hours_played}}</h3>
-    {% endfor %}
+{% block content %}
+
+
+<div class="col search-mobile search-box no-padding">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.search_q.errors|striptags }}
+        <div class="inner-addon left-addon"><i class="fas fa-search"></i>
+            <input required name="search_q" autocomplete="off" type="search" class="profile-search searchDesktop" placeholder="Search profiles or login with Steam">
+        </div>
+            <div v-show="isSearchActive" class="bg-primary search-examples">
+                <div class="col text-truncate"><span>Search examples:</span></div>
+                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
+                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
+                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
+                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>gabelogannewell</span></div>
+            </div>
+    </form>
+
 </div>
+            <div class="row">
+        <div class="col"><span id="leaderboards-label-desktop" class="d-none d-md-block">Top Rust Leaderboards</span><span id="leaderboards-label-mobile" class="d-block d-md-none">Top Rust Leaderboards</span></div>
+    </div>
+    
+    <div class="row">
+
+
+        {% for ranking_name, users in top.items %}
+
+            <div class="col col-12 col-sm-12 col-md-6 col-lg-4 leaderboard">
+                <div class="leaderboard-label bg-secondary"><span>{{ ranking_name }}</span></div>
+                <div class="overflow-auto scrollbar leaderboard-scrollbar">
+
+                    {% for user in users %}
+                    <a href="/rust-stats/user/{{user.user_id}}" class="no-link-underline">
+                        <div class="row leaderboard-rank hover-dim">
+                            <div class="col leaderboard-position text-center"><span>#{{ forloop.counter }}</span></div>
+                            <div class="col col-3 col-md-4"><img class="w-100" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/{{user.avatar}}"></div>
+                            <div class="col leaderboard-position-name col-6">
+                                <div class="text-truncate friends-name"><span>{{user.user_name}}</span></div>
+                                <div class="friends-hours"><span class="text-truncate">{{user.top_value}}</span></div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+
+
+{% endblock %}
