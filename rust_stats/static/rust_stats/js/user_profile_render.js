@@ -74,7 +74,7 @@ var userStats = new Vue({
                 // console.log(key, _this.user[key]);
                 if (Number.isInteger(_this.user[key])){ 
                     if (_this.time_variables.includes(key)) {
-                            _this.user[key] = moment.duration(_this.user[key], "seconds").humanize({h:99999});
+                            _this.user[key] = moment.duration(_this.user[key], "seconds").humanize({h:99999, s:0});
                             return;
                     }
                     if (_this.user[key] > 999999) {  // > 999,999
