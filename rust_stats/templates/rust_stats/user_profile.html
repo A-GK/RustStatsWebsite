@@ -118,9 +118,9 @@
             
             <div v-if="wasPublicIsPrivate" class="row stats-card">
                 <div class="col">
-                    <div class="bg-secondary card-name stats-text"><i class="fas fa-exclamation-triangle text-warning" style="margin-right: 8px;"></i><span class="text-warning">Private Profile</span><span class="float-right d-none d-sm-block">Updated !{last_update} ago</span></div>
+                    <div class="bg-secondary card-name stats-text"><i class="fas fa-exclamation-triangle text-warning" style="margin-right: 8px;"></i><span class="text-warning">Private Profile</span><span class="float-right d-none d-sm-block private-profile">Updated !{last_update} ago</span></div>
                     <div class="row stats-row">
-                        <div class="col card-name stats-text">
+                        <div class="col card-name stats-text private-profile">
                             <p>This profile is now private but we have a record of it from !{last_update} ago. Please <a href="https://steamcommunity.com/id/profile/edit/settings" target="_blank" rel="noreferrer" style="text-decoration: underline;">set it to public</a>. Refresh the page in 2-5 minutes to see the updated stats. Last attempted update was !{last_attempt} ago.</p>
                         </div>
                     </div>
@@ -131,9 +131,9 @@
 
                 <div class="col col-12">
                     <div class="bg-secondary card-name stats-text"><i class="fas fa-exclamation-triangle text-danger" style="margin-right: 8px;"></i><span
-                            class="text-danger">Private Profile</span><span class="float-right d-none d-lg-block">Attempted to update !{last_attempt} ago</span></div>
+                            class="text-danger">Private Profile</span><span class="float-right d-none d-lg-block private-profile">Attempted to update !{last_attempt} ago</span></div>
                     <div class="row stats-row">
-                        <div class="col card-name stats-text">
+                        <div class="col card-name stats-text private-profile">
                             <p>This profile is private or has never played Rust. Please <a href="https://steamcommunity.com/id/profile/edit/settings" target="_blank" rel="noreferrer" style="text-decoration: underline;">set it to public</a> and refresh the page in 2-5 minutes to see your stats.</p>
                         </div>
                     </div>

@@ -165,3 +165,7 @@ def user_friends(request, user_id):
         logger.exception(f"An exception occurred while trying to convert user_friends into json. user_id {user_id}")
         return JsonResponse({"success": False})
     return JsonResponse(friends_data)
+
+
+def page_not_found(request, exception):
+    return render(request, 'rust_stats/404.html', status=404)

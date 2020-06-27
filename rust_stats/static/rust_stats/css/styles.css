@@ -1,3 +1,17 @@
+.leaderboard-value {
+	color: #adacac;
+	font-size: large;
+	/* font-weight: 500; */
+	font-size: 1.5em
+}
+.leaderboard-name {
+	font-weight: 500;
+}
+
+.private-profile {
+	font-weight: 400 !important;
+}
+
 .no-padding {
 	padding: 0px 0px;
 }

@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div class="cover">
+    <div>
         <div class="col search-mobile search-box no-padding">
             <form action="" method="post">
                 {% csrf_token %}
@@ -44,8 +44,8 @@
                                     <div class="col leaderboard-position text-center"><span>#{{ forloop.counter }}</span></div>
                                     <div class="col col-3 col-md-4"><img class="w-100 lazy" src="{% static 'rust_stats/images/loading.png' %}" data-src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/{{user.avatar}}" alt="Profile Picture"></div>
                                     <div class="col leaderboard-position-name col-6">
-                                        <div class="text-truncate friends-name"><span>{{user.user_name}}</span></div>
-                                        <div class="friends-hours"><span class="text-truncate">{{user.top_value}}</span></div>
+                                        <div class="text-truncate leaderboard-name"><span>{{user.user_name}}</span></div>
+                                        <div class="friends-hours"><span class="text-truncate leaderboard-value">{{user.top_value}}</span></div>
                                     </div>
                                 </div>
                             </a>

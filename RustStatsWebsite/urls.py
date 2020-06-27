@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
 
+handler404 = 'rust_stats.views.page_not_found'
+
 urlpatterns = [
     path('', include('rust_stats.urls')),
     url('', include('social_django.urls', namespace='social')),
