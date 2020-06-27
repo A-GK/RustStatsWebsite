@@ -96,7 +96,7 @@ def convert_stats_names(user_stats):
     for key, value in user_stats.items():
         new_name = user_stats_names_map.get(key, None)
         if new_name is None:
-            logger.warning(f"Encountered a new statistics value named {key}")
+            logger.info(f"Encountered a new statistics value named {key}")
             continue
         new_user_stats[new_name] = value
     return new_user_stats
@@ -294,7 +294,7 @@ def resolve_vanity_url(vanity_url):
             return None
         return user_info["steamid"]
     except Exception:
-        logger.info(f"Encountered a caught exception while trying to resolve vanity url \
+        logger.warning(f"Encountered a caught exception while trying to resolve vanity url \
         (unknown format of the returned api response?). vanity_url {vanity_url}", exc_info=True)
         return None
 
