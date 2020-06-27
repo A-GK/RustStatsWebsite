@@ -116,7 +116,7 @@ top_categories = [
     ["gathered_stone", "Gathered Stone"],
     ["gathered_scrap", "Gathered Scrap"],
     ["horse_distance_ridden_km", "Horse Ridden in KM"],
-    ["instruments_notes_played", "Instrument Notes Played"],
+    ["instruments_notes_played", "Notes Played"],
     ["items_dropped", "Items Dropped"],
     ["items_examined", "Items Inspected"],
     ["blueprints_learned", "Blueprints Learned"],
