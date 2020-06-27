@@ -294,7 +294,7 @@ def resolve_vanity_url(vanity_url):
             return None
         return user_info["steamid"]
     except Exception:
-        logger.warning(f"Encountered a caught exception while trying to resolve vanity url \
+        logger.info(f"Encountered a caught exception while trying to resolve vanity url \
         (unknown format of the returned api response?). vanity_url {vanity_url}", exc_info=True)
         return None
 
