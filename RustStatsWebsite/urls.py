@@ -22,5 +22,5 @@ handler404 = 'rust_stats.views.page_not_found'
 urlpatterns = [
     path('', include('rust_stats.urls')),
     url('', include('social_django.urls', namespace='social')),
-    path('admin/', admin.site.urls),
+    path('special/admin_panel/', admin.site.urls),
 ]
