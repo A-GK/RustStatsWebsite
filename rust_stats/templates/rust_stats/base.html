@@ -28,6 +28,7 @@
                 id="navcol-1">
                 <ul class="nav navbar-nav">
                     <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#" target="_blank">Discord Bot</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="#" target="_blank">Discord Server</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="https://skinsdelta.com/rust/">Skins Stats</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
@@ -49,10 +50,16 @@
             {% block footer %}
             <footer class="footer">
                 <div class="row" id="footer-disclaimers">
-                    <div class="col col-12 col-md-6 site-info"><span>Privacy Policy | Cookie Policy</span></div>
-                    <div class="col col-12 col-md-6 d-none d-md-block site-info" id="discord-desktop"><span class="float-right">Join our discord server if you have suggestions/feedback</span></div>
-                    <div class="col col-12 col-md-6 d-block d-md-none site-info" id="discord-mobile"><span>Join our discord server if you have suggestions/feedback</span></div>
-                    <div class="col" id="other-disclaimers"><span>Statistics are provided by Steam. These stats are only tracked on servers under the "Official Servers" tab. Intentional abuse of the stats system will lead to a profile ban.<br></span><span>Steam is a registered trademark of Valve. Valve has not endorsed and is not responsible for this site or its content.<br></span><span>Rust is a registered trademark of Facepunch. Game materials copyright Facepunch. Facepunch has not endorsed and is not responsible for this site or its content.<br></span><span>Trademarks are the property of their respective owners.</span></div>
+                    <div class="col col-12 col-md-6 d-none d-md-block site-info" id="discord-desktop">
+                        <span class="">Join our discord server if you have suggestions/feedback</span>
+                    </div>
+                    <div class="col col-12 col-md-6 d-block d-md-none site-info" id="discord-mobile">
+                        <span>Join our discord server if you have suggestions/feedback</span>
+                    </div>
+                    <div class="col col-12 col-md-6 site-info"><span></span></div>
+                    <div class="col" id="other-disclaimers">
+                        <span>Statistics are provided by Steam. These stats are only tracked on servers under the "Official Servers" tab. Intentional abuse of the stats system will lead to a profile ban.<br></span><span>Steam is a registered trademark of Valve. Valve has not endorsed and is not responsible for this site or its content.<br></span><span>Rust is a registered trademark of Facepunch. Game materials copyright Facepunch. Facepunch has not endorsed and is not responsible for this site or its content.<br></span><span>Trademarks are the property of their respective owners.</span>
+                    </div>
                 </div>
             </footer>
             {% endblock %}
