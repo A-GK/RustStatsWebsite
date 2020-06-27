@@ -81,17 +81,28 @@ WSGI_APPLICATION = 'RustStatsWebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': db_host,
-        'PORT': db_port,
-        'PASSWORD': db_password,
-        'NAME': db_name,
-        'USER': db_user,
-    },
-}
 
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': production_host,
+            'USER': production_user,
+            'PASSWORD': production_password,
+            'NAME': production_name,
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': local_host,
+            'PORT': local_port,
+            'PASSWORD': local_password,
+            'NAME': local_name,
+            'USER': local_user,
+        },
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
