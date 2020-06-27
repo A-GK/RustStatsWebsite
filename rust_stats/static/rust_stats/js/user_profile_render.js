@@ -57,8 +57,8 @@ var userStats = new Vue({
             this.wasPublicIsPrivate = moment.duration(moment().diff(userStats.user.last_successful_update)).asMinutes() > 30;
             this.user.horse_distance_ridden_mi = Math.round(this.user.horse_distance_ridden_km / 1.609);
             this.user.KDR = Math.round(this.user.kill_players / this.user.deaths * 100)/100;
-            
-            if (this.user.bullets_fired == 0 || bullets_hit_players == 0) {
+
+            if (this.user.bullets_fired == 0 || this.user.bullets_hit_players == 0) {
                 this.user.bullets_hit_players_percentage = "0%"
                 this.user.headshot_percentage = "0%"
             } else {
