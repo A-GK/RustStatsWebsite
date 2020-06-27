@@ -169,7 +169,6 @@ def user_friends(request, user_id):
 
 def ban_user(request):
     if not request.user.is_staff:
-        print("User is not staff")
         return JsonResponse({"success": False})
     if request.method != 'POST' and not request.is_ajax:
         return JsonResponse({"success": False})
@@ -199,23 +198,23 @@ def ban_user(request):
 
     return JsonResponse({"success": False})
 
-    # try:
-    #     user_name = User.objects.get(pk=user_id).user_name
-    #     title = f"{user_name}'s Rust Stats | View anyone's Rust stats"
-    # except Exception:
-    #     title = f"Rust Stats | View anyone's Rust stats"
 
-    # if request.method == 'POST':
-    #     form = SearchUser(request.POST)
-    #     if form.is_valid():
-    #         try:
-    #             search_q = form.cleaned_data["search_q"]
-    #             return HttpResponseRedirect('/rust-stats/user/' + search_q)
-    #         except Exception:
-    #             return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title})
-    # else:
-    #     form = SearchUser()
-    # return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title}) 
+def delete_user(request):
+    if not request.user.is_staff:
+        return JsonResponse({"success": False})
+    if request.method != 'POST' and not request.is_ajax:
+        return JsonResponse({"success": False})
+    try:
+        user_id = request.POST["user_id"]
+    except Exception:
+        return JsonResponse({"success": False})
+
+    try:
+        user = User.objects.get(pk=user_id)
+        user.delete()
+        return JsonResponse({"success": True, "response_message": "User was deleted"})
+    except:
+        return JsonResponse({"success": False})
 
 
 def page_not_found(request, exception):

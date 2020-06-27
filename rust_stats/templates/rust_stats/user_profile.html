@@ -60,13 +60,19 @@
 
             {% if request.user.is_staff %}
                 <a v-if="!user.is_banned" @click="banUser($event, 'ban')" @click.prevent href="#">
-                    <div id="ban-button" class="bg-secondary">
+                    <div class="bg-secondary admin-button">
                         <span>Ban user</span>
                     </div>
                 </a>
                 <a v-if="user.is_banned" @click="banUser($event, 'unban')" @click.prevent href="#">
-                    <div id="ban-button" class="bg-secondary">
+                    <div class="bg-secondary admin-button">
                         <span>Unban user</span>
+                    </div>
+                </a>
+
+                <a @click="deleteUser()" @click.prevent href="#">
+                    <div class="bg-secondary admin-button">
+                        <span>Delete user</span>
                     </div>
                 </a>
             {% endif %}

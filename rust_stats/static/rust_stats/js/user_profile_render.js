@@ -106,11 +106,34 @@ var userStats = new Vue({
                         alert(data.response_message);
                         _this.user.is_banned = !_this.user.is_banned;  // Dynamically changes the ban button to ban/unban
                     } else {
-                        alert("Failed to process ban request")
+                        alert("Failed to process ban request");
                     }
                 }
             });
         },
+
+        deleteUser: function (event) {
+            _this = this;
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRFToken", document.querySelector('[name=csrfmiddlewaretoken]').value);
+                },
+                type: "POST",
+                url: "/rust-stats/delete-user",
+                data: {
+                    "user_id": _this.steamid,
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data && data.success && data.response_message) {
+                        alert(data.response_message);
+                    } else {
+                        alert("Failed to process deletion request");
+                    }
+                }
+            });
+        },
+
     },
 
     created: function () {
