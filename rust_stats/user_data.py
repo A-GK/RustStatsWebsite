@@ -327,6 +327,7 @@ def get_category_top_users(category, users):
         top_users = list(args.values("user_id", "user_name", "avatar", category))
         for top_user in top_users:
             top_user["top_value"] = top_user.pop(category)
+            top_user["avatar"] = top_user["avatar"].replace("_full", "_medium")
         if [ele for ele in ["duration", "second"] if(ele in category)]:
             for top_user in top_users:
                 top_user["top_value"] = top_user["top_value"] / 3600  # Get hours instead of seconds

@@ -413,10 +413,14 @@
 
 .card-name {
   font-size: larger;
+  font-weight: 500;
 }
 
 .stats-heading {
-  color: #8F8E8E;
+  color: #9a9a9a;
+  font-weight: 500;
+  /* color: #adacac; */
+  /* color: #8F8E8E; */
   font-size: large;
 }
 
@@ -449,6 +453,7 @@ body {
 
 .stats-heading-large {
   font-size: xx-large;
+  font-weight: normal;
 }
 
 .stats-value-large {
@@ -533,7 +538,8 @@ body {
 }
 
 .friends-hours {
-  color: #8F8E8E;
+  color: #adacac;
+  /* color: #8F8E8E; */
 }
 
 .scrollbar-primary::-webkit-scrollbar {
@@ -698,6 +704,7 @@ body::-webkit-scrollbar-thumb {
 #other-disclaimers {
   margin-top: 0.7em;
   margin-bottom: 0.7em;
+  color: #9a9a9a;
 }
 
 .search-box {

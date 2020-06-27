@@ -1,58 +1,67 @@
 {% extends "rust_stats/base.html" %}
+{% load static %}
 
+{% block header_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.0.1/lazyload.min.js" integrity="sha256-AK03z/0QHA6wxIUFTFRDlk0rfpHL06/bQboMijh+dug=" crossorigin="anonymous"></script>
+{% endblock %}
 
 {% block content %}
 
-
-<div class="col search-mobile search-box no-padding">
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.search_q.errors|striptags }}
-        <div class="inner-addon left-addon"><i class="fas fa-search"></i>
-            <input required name="search_q" autocomplete="off" type="search" class="profile-search searchDesktop" placeholder="Search profiles or login with Steam">
-        </div>
-            <div v-show="isSearchActive" class="bg-primary search-examples">
-                <div class="col text-truncate"><span>Search examples:</span></div>
-                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
-                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
-                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
-                <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>gabelogannewell</span></div>
-            </div>
-    </form>
-
-</div>
-            <div class="row">
-        <div class="col"><span id="leaderboards-label-desktop" class="d-none d-md-block">Top Rust Leaderboards</span><span id="leaderboards-label-mobile" class="d-block d-md-none">Top Rust Leaderboards</span></div>
-    </div>
-    
-    <div class="row">
-
-
-        {% for ranking_name, users in top.items %}
-
-            <div class="col col-12 col-sm-12 col-md-6 col-lg-4 leaderboard">
-                <div class="leaderboard-label bg-secondary"><span>{{ ranking_name }}</span></div>
-                <div class="overflow-auto scrollbar leaderboard-scrollbar">
-
-                    {% for user in users %}
-                    <a href="/rust-stats/user/{{user.user_id}}" class="no-link-underline">
-                        <div class="row leaderboard-rank hover-dim">
-                            <div class="col leaderboard-position text-center"><span>#{{ forloop.counter }}</span></div>
-                            <div class="col col-3 col-md-4"><img class="w-100" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/{{user.avatar}}"></div>
-                            <div class="col leaderboard-position-name col-6">
-                                <div class="text-truncate friends-name"><span>{{user.user_name}}</span></div>
-                                <div class="friends-hours"><span class="text-truncate">{{user.top_value}}</span></div>
-                            </div>
-                        </div>
-                    </a>
-                    {% endfor %}
-
+    <div class="cover">
+        <div class="col search-mobile search-box no-padding">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.search_q.errors|striptags }}
+                <div class="inner-addon left-addon"><i class="fas fa-search"></i>
+                    <input required name="search_q" autocomplete="off" type="search" class="profile-search searchDesktop" placeholder="Search profiles or login with Steam">
                 </div>
-            </div>
-        {% endfor %}
+                    <div v-show="isSearchActive" class="bg-primary search-examples">
+                        <div class="col text-truncate"><span>Search examples:</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/profiles/76561197960287930</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>https://steamcommunity.com/id/gabelogannewell</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>76561197960287930</span></div>
+                        <div class="col text-truncate"><i class="fas fa-check text-success" style="margin-right: 0.5em;"></i><span>gabelogannewell</span></div>
+                    </div>
+            </form>
+        </div>
 
+
+        <div class="row">
+            <div class="col"><span id="leaderboards-label-desktop" class="d-none d-md-block">Top Rust Leaderboards</span><span id="leaderboards-label-mobile" class="d-block d-md-none">Top
+                    Rust Leaderboards</span></div>
+        </div>
+
+
+        <div class="row" id="leaderboard" v-lazy-container="{ selector: 'img' }">
+            {% for ranking_name, users in top.items %}
+                <div class="col col-12 col-sm-12 col-md-6 col-lg-4 leaderboard">
+                    <div class="leaderboard-label bg-secondary"><span>{{ ranking_name }}</span></div>
+                    <div class="overflow-auto scrollbar leaderboard-scrollbar">
+
+                        {% for user in users %}
+                            <a href="/rust-stats/user/{{user.user_id}}" class="no-link-underline">
+                                <div class="row leaderboard-rank hover-dim">
+                                    <div class="col leaderboard-position text-center"><span>#{{ forloop.counter }}</span></div>
+                                    <div class="col col-3 col-md-4"><img class="w-100 lazy" src="{% static 'rust_stats/images/loading.png' %}" data-src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/{{user.avatar}}" alt="Profile Picture"></div>
+                                    <div class="col leaderboard-position-name col-6">
+                                        <div class="text-truncate friends-name"><span>{{user.user_name}}</span></div>
+                                        <div class="friends-hours"><span class="text-truncate">{{user.top_value}}</span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
     </div>
+{% endblock %}
 
 
-
+{% block footer_scripts %}
+<script>
+    var lazyLoadInstance = new LazyLoad();
+</script>
 {% endblock %}
