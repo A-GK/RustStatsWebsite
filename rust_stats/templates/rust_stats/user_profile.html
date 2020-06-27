@@ -58,6 +58,18 @@
                 <span v-else>Updated !{last_update} ago</span>
             </div>
 
+            {% if request.user.is_staff %}
+                <a v-if="!user.is_banned" @click="banUser($event, 'ban')" @click.prevent href="#">
+                    <div id="ban-button" class="bg-secondary">
+                        <span>Ban user</span>
+                    </div>
+                </a>
+                <a v-if="user.is_banned" @click="banUser($event, 'unban')" @click.prevent href="#">
+                    <div id="ban-button" class="bg-secondary">
+                        <span>Unban user</span>
+                    </div>
+                </a>
+            {% endif %}
             
             <div class="row">
                 <div class="col">

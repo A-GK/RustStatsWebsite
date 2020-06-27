@@ -9,4 +9,5 @@ urlpatterns = [
     path('rust-stats/user/<int:user_id>', views.user_profile, name='user_profile'),
     path('rust-stats/user-stats/<int:user_id>', views.user_stats, name='user_stats'),
     path('rust-stats/user-friends/<int:user_id>', views.user_friends, name='user_friends'),
+    path('rust-stats/ban-user', views.ban_user, name='ban_user'),
 ]

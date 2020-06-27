@@ -687,6 +687,11 @@ body::-webkit-scrollbar-thumb {
   margin-bottom: 12px;
 }
 
+#ban-button {
+  padding: 6PX 1em;
+  margin-bottom: 12px;
+}
+
 .navbar-light .navbar-toggler {
   border: none;
 }

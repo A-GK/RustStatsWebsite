@@ -87,6 +87,30 @@ var userStats = new Vue({
                 }
             });
         },
+
+        banUser: function (event, ban_status) {
+            _this = this;
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRFToken", document.querySelector('[name=csrfmiddlewaretoken]').value);
+                },
+                type: "POST",
+                url: "/rust-stats/ban-user",
+                data: {
+                    "user_id": _this.steamid,
+                    "ban_status": ban_status,  // Either "ban" or "unban"
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data && data.success && data.response_message) {
+                        alert(data.response_message);
+                        _this.user.is_banned = !_this.user.is_banned;  // Dynamically changes the ban button to ban/unban
+                    } else {
+                        alert("Failed to process ban request")
+                    }
+                }
+            });
+        },
     },
 
     created: function () {
@@ -101,7 +125,7 @@ var userStats = new Vue({
             if (json.success){
                 // If the profile was never seen before then it won't have user's name in the title
                 // so we do it in here
-                document.title = json.user_name + "'s Rust Stats | View anyone's Rust stats"
+                document.title = json.user_name + "'s Rust Stats | View anyone's Rust stats";
                 _this.getFriends();
             } else {
                 hideElementById("footer-disclaimers");

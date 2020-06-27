@@ -104,7 +104,7 @@ def user_stats(request, user_id):
         user_data = serializers.serialize("json", [user])
         user_data = json.loads(user_data)
         user_data = user_data[0]["fields"]
-        del user_data["is_banned"], user_data["friends"]
+        del user_data["friends"]
         user_data["success"] = True
     except Exception:
         logger.exception("An exception occurred while trying to get user_stats request and convert it into json")
@@ -165,6 +165,57 @@ def user_friends(request, user_id):
         logger.exception(f"An exception occurred while trying to convert user_friends into json. user_id {user_id}")
         return JsonResponse({"success": False})
     return JsonResponse(friends_data)
+
+
+def ban_user(request):
+    if not request.user.is_staff:
+        print("User is not staff")
+        return JsonResponse({"success": False})
+    if request.method != 'POST' and not request.is_ajax:
+        return JsonResponse({"success": False})
+    try:
+        user_id = request.POST["user_id"]
+        ban_status = request.POST["ban_status"]
+    except Exception:
+        return JsonResponse({"success": False})
+
+
+    if ban_status == "ban":
+        try:
+            user = User.objects.get(pk=user_id)
+            user.is_banned = True
+            user.save()
+            return JsonResponse({"success": True, "response_message": "Banned the user"})
+        except:
+            pass
+    elif ban_status == "unban":
+        try:
+            user = User.objects.get(pk=user_id)
+            user.is_banned = False
+            user.save()
+            return JsonResponse({"success": True, "response_message": "Unbanned the user"})
+        except:
+            pass
+
+    return JsonResponse({"success": False})
+
+    # try:
+    #     user_name = User.objects.get(pk=user_id).user_name
+    #     title = f"{user_name}'s Rust Stats | View anyone's Rust stats"
+    # except Exception:
+    #     title = f"Rust Stats | View anyone's Rust stats"
+
+    # if request.method == 'POST':
+    #     form = SearchUser(request.POST)
+    #     if form.is_valid():
+    #         try:
+    #             search_q = form.cleaned_data["search_q"]
+    #             return HttpResponseRedirect('/rust-stats/user/' + search_q)
+    #         except Exception:
+    #             return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title})
+    # else:
+    #     form = SearchUser()
+    # return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title}) 
 
 
 def page_not_found(request, exception):
