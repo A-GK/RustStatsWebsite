@@ -26,8 +26,11 @@ SECRET_KEY = django_secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+if os.getenv('GAE_APPLICATION', None):
+    ALLOWED_HOSTS = ["ruststats.gg"]
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-ALLOWED_HOSTS = ["ruststats.gg"]
 
 SESSION_COOKIE_AGE = 15552000  # 6 months
 
