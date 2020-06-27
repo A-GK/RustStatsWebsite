@@ -4,7 +4,7 @@ runtime: python37
 handlers:
 # This configures Google App Engine to serve the files in the app's static
 # directory.
-- url: /static
+- url: /static/rust_stats
   static_dir: rust_stats/static/rust_stats/
 
 # This handler routes all requests not caught above to your main app. It is
@@ -12,4 +12,9 @@ handlers:
 # the entire handlers section) when there are no static files defined.
 - url: /.*
   script: auto
+
+
+
+env_variables:
+  DJANGO_SETTING_MODULE: RustStatsWebsite.settings.production
 # [END django_app]

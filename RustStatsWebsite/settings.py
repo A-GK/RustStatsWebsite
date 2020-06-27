@@ -154,20 +154,6 @@ if not 'test' in sys.argv:  # Disable logging during unit tests
             },
         },
         'handlers': {
-            'django': {
-                'class': 'logging.handlers.RotatingFileHandler',
-                'formatter': 'basic',
-                'filename': os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/django.log'),
-                'maxBytes': 1048576,
-                'backupCount': 2
-            },
-            'rust_stats': {
-                'class': 'logging.handlers.RotatingFileHandler',
-                'formatter': 'basic',
-                'filename': os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/rust_stats.log'),
-                'maxBytes': 1048576,
-                'backupCount': 3
-            },
             'console': {
                 'level': 'INFO',
                 'class': 'logging.StreamHandler',
@@ -176,12 +162,12 @@ if not 'test' in sys.argv:  # Disable logging during unit tests
         },
         'loggers': {
             'django': {
-                'handlers': ['django', 'console'],
+                'handlers': ['console'],
                 'level': 'WARNING',
                 'propagate': True
             },
             'rust_stats': {
-                'handlers': ['rust_stats', 'console'],
+                'handlers': ['console'],
                 'level': 'WARNING',
             }
         },
