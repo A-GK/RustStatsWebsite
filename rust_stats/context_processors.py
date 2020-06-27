@@ -192,7 +192,7 @@ def categories(request):
                 ["destroyed_barrels", "Barrels destroyed"],
                 ["voice_chat_seconds", "Voicechat Time"],
                 ["blueprints_learned", "Blueprints Learned"],
-                ["oilrig_helipad_landings", "Oilrig Helipad Landings"],
+                ["oilrig_helipad_landings", "Oilrig Helipad Pilot Landings"],
             ])
         },
     ]
