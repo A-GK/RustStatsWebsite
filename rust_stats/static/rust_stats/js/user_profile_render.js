@@ -55,11 +55,16 @@ var userStats = new Vue({
 
             // Was profile ever public and we have a record of it but now is private
             this.wasPublicIsPrivate = moment.duration(moment().diff(userStats.user.last_successful_update)).asMinutes() > 30;
-
-            this.user.KDR = Math.round(this.user.kill_players / this.user.deaths * 100)/100;
-            this.user.bullets_hit_players_percentage = Math.round(this.user.bullets_hit_players / this.user.bullets_fired * 10000) / 100 + "%"
-            this.user.headshot_percentage = Math.round(this.user.headshots / this.user.bullets_hit_players * 10000) / 100 + "%"
             this.user.horse_distance_ridden_mi = Math.round(this.user.horse_distance_ridden_km / 1.609);
+            this.user.KDR = Math.round(this.user.kill_players / this.user.deaths * 100)/100;
+            
+            if (this.user.bullets_fired == 0 || bullets_hit_players == 0) {
+                this.user.bullets_hit_players_percentage = "0%"
+                this.user.headshot_percentage = "0%"
+            } else {
+                this.user.bullets_hit_players_percentage = Math.round(this.user.bullets_hit_players / this.user.bullets_fired * 10000) / 100 + "%"
+                this.user.headshot_percentage = Math.round(this.user.headshots / this.user.bullets_hit_players * 10000) / 100 + "%"
+            }
         },
 
         formatVariables: function () {
