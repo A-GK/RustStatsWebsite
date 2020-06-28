@@ -17,7 +17,7 @@
 {% if avatar %}
     <meta property="og:image" content="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/{{avatar}}"/>
 {% else %}
-    <meta property="og:image" content="http://{{ request.get_host }}{% static 'rust_stats/images/ogp_default.png' %}"/>
+    <meta property="og:image" content="https://{{ request.get_host }}{% static 'rust_stats/images/ogp_default.png' %}"/>
 {% endif %}
 {% include "rust_stats/loading_animation.html" %}
 {% endblock %}
@@ -87,9 +87,9 @@
             <div class="row">
                 <div class="col">
                     <div class="bg-secondary friends-label">
-                        <span v-if="friends && friends.success && !(friendsNum == 0)">!{friendsNum} Friend!{friendsNum == 1 ? "" : "s"} on RustStats</span>
+                        <span v-if="friends && friends.success && !(friendsNum == 0)">!{friendsNum} Friend!{friendsNum == 1 ? "" : "s"} on RustStats.gg</span>
                         <span v-else-if="!friends">Loading friends...</span>
-                        <span v-else>No friends on RustStats</span>
+                        <span v-else>No friends on RustStats.gg</span>
                     </div>
                     <div v-if="friends && friends.success && !(friendsNum == 0)" class="overflow-auto scrollbar">
                         
