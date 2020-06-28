@@ -223,5 +223,17 @@ def delete_user(request):
         return JsonResponse({"success": False})
 
 
+def delete_inactive_users(request):
+    if not request.user.is_staff:
+        return JsonResponse({"success": False})
+    try:
+        users = User.objects.filter(last_successful_update__isnull=True, last_attempted_update__lte=timezone.now()-timezone.timedelta(hours=3))
+        count = users.count()
+        users.delete()
+        return JsonResponse({"response": f"Successfully deleted {count} users"})
+    except Exception:
+        return JsonResponse({"success": False})
+
+
 def page_not_found(request, exception):
     return render(request, 'rust_stats/404.html', status=404)
