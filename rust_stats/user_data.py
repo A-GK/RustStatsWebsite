@@ -395,12 +395,9 @@ def update_tracked_friends(user_id):
     tracked_friends = []
     friend_list = get_users_friends(user_id)
     if friend_list != []:
-        for friend in friend_list:
-            try:
-                tracked_player = User.objects.get(pk=friend)
-                tracked_friends.append(tracked_player)
-            except Exception:
-                pass
+        friends = User.objects.filter(user_id__in=friend_list)
+        for friend in friends:
+            tracked_friends.append(friend)
         # Clears <friends> relations and then sets them to new relations
         user.friends.set(tracked_friends, clear=True)
     user.friends_last_updated = timezone.now()
