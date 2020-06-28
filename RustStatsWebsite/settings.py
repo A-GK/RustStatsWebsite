@@ -31,7 +31,7 @@ if os.getenv('GAE_APPLICATION', None):
 else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-
+SITE_ID = 1  # Sites framework, used for sitemap
 SESSION_COOKIE_AGE = 15552000  # 6 months
 
 # Application definition
@@ -39,6 +39,8 @@ SESSION_COOKIE_AGE = 15552000  # 6 months
 INSTALLED_APPS = [
     'rust_stats',
     'social_django',
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

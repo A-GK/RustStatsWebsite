@@ -1,6 +1,16 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import views as sitemaps_views
+from .sitemap import *
 
 from . import views
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'users': UserSitemap,
+}
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -11,4 +21,7 @@ urlpatterns = [
     path('rust-stats/user-friends/<int:user_id>', views.user_friends, name='user_friends'),
     path('rust-stats/ban-user', views.ban_user, name='ban_user'),
     path('rust-stats/delete-user', views.delete_user, name='delete_user'),
+    # 4 hours cache time for sitemaps
+    path('sitemap.xml',  cache_page(14400)(sitemaps_views.index), {'sitemaps': sitemaps, 'sitemap_url_name': 'sitemaps'}),
+    path('sitemap-<section>.xml', cache_page(14400)(sitemaps_views.sitemap), {'sitemaps': sitemaps}, name='sitemaps'),
 ]
