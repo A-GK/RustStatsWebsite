@@ -95,8 +95,8 @@
                         
                         
                         <div v-for="friend in friends.friends" class="row friends-row hover-dim bg-primary">
-                            <a :href="`/rust-stats/user/` + friend.user_id" class="a-friend">
-                                <div class="col">
+                            <div class="col">
+                                <a :href="`/rust-stats/user/` + friend.user_id">
                                     <div class="row">
                                         <div class="col col-3 col-md-4">
                                             <img class="img-fluid" :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + friend.avatar" alt="Profile Picture">
@@ -107,8 +107,8 @@
                                             <div v-else class="friends-hours"><span class="text-truncate">Private hours</span></div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
