@@ -45,10 +45,16 @@ def index(request):
 
 def user_profile(request, user_id):
     try:
-        user_name = User.objects.get(pk=user_id).user_name
+        user = User.objects.get(pk=user_id)
+        user_name = user.user_name
+        avatar = user.avatar
         title = f"{user_name}'s Rust Stats | View anyone's Rust stats"
+        ogp_title = f"{user_name}'s Rust Stats"
     except Exception:
         title = f"Rust Stats | View anyone's Rust stats"
+        ogp_title = title
+        avatar = ""
+        
 
     if request.method == 'POST':
         form = SearchUser(request.POST)
@@ -57,10 +63,10 @@ def user_profile(request, user_id):
                 search_q = form.cleaned_data["search_q"]
                 return HttpResponseRedirect('/rust-stats/user/' + search_q)
             except Exception:
-                return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title})
+                return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title, 'ogp_title': ogp_title, 'avatar': avatar})
     else:
         form = SearchUser()
-    return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title}) 
+    return render(request, 'rust_stats/user_profile.html', {'form': form, 'title': title, 'ogp_title': ogp_title, 'avatar': avatar}) 
 
 
 def user_stats(request, user_id):

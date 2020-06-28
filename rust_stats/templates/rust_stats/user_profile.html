@@ -11,6 +11,14 @@
 
 
 {% block header_content %}
+<meta property="og:title" content="{{ ogp_title }}"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+{% if avatar %}
+    <meta property="og:image" content="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/{{avatar}}"/>
+{% else %}
+    <meta property="og:image" content="http://{{ request.get_host }}{% static 'rust_stats/images/ogp_default.png' %}"/>
+{% endif %}
 {% include "rust_stats/loading_animation.html" %}
 {% endblock %}
 
