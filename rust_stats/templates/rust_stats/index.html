@@ -3,6 +3,10 @@
 
 {% block header_scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.0.1/lazyload.min.js" integrity="sha256-AK03z/0QHA6wxIUFTFRDlk0rfpHL06/bQboMijh+dug=" crossorigin="anonymous"></script>
+<meta property="og:title" content="RustStats.gg - Rust Leaderboards and User Stats"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+<meta property="og:image" content="https://{{ request.get_host }}{% static 'rust_stats/images/ogp_ak.png' %}"/>
 {% endblock %}
 
 {% block content %}

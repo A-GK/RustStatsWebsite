@@ -17,7 +17,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <link rel="icon" href="{% static 'rust_stats/images/favicon.ico' %}" type="image/gif" sizes="48x48">
-    <title>{% block title %}RustStats.gg - View anyone's Rust stats{% endblock %}</title>
+    <title>{% block title %}RustStats.gg - Rust Stats and Leaderboards{% endblock %}</title>
     <meta name="Description" content="{% block page_description %}Rust leaderboards and stats. View anyone's stats for the game of Rust. Kills, deaths, gathered materials and more {% endblock %}">
     <link rel="preconnect" href="https://steamcdn-a.akamaihd.net">
     <link rel="stylesheet" href="{% static 'rust_stats/bootstrap/css/bootstrap.min.css' %}">
@@ -26,10 +26,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js" integrity="sha256-LlHVI5rUauudM5ZcZaD6hHPHKrA7CSefHHnKgq+/AZc=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{% static 'rust_stats/css/styles.css' %}">
-    <meta property="og:title" content="RustStats.gg - Rust Leaderboards and user stats"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
-    <meta property="og:image" content="https://{{ request.get_host }}{% static 'rust_stats/images/ogp_ak.png' %}"/>
     {% block header_scripts %}{% endblock %}
     {% block header_content %}{% endblock %}
 </head>
