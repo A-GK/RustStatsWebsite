@@ -96,7 +96,7 @@
                         
                         <div v-for="friend in friends.friends" class="row friends-row hover-dim bg-primary">
                             <div class="col">
-                                <a :href="`/rust-stats/user/` + friend.user_id">
+                                <a :href="`/rust-stats/user/` + friend.user_id" style="text-decoration: none;">
                                     <div class="row">
                                         <div class="col col-3 col-md-4">
                                             <img class="img-fluid" :src="`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/` + friend.avatar" alt="Profile Picture">
