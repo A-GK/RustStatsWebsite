@@ -4,3 +4,4 @@ social-auth-core==3.3.3
 social-auth-app-django==3.4.0
 cachetools==4.1.0
 psycopg2==2.8.5
+better-profanity==0.6.1

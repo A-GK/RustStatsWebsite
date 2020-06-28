@@ -7,6 +7,7 @@ from .models import User
 from credentials import steam_api_key
 from .user_stats_names import user_stats_names_map, top_categories
 from datetime import datetime
+from better_profanity import profanity
 
 
 logger = logging.getLogger("rust_stats")
@@ -116,6 +117,11 @@ def get_user_stats(steamid):
 ############################# END USER STATS #############################
 
 
+def filter_user_name(user_name):
+    return 
+    
+
+
 def get_user_name_and_avatar(steamid):
     if not is_test:
         try:
@@ -138,7 +144,7 @@ def get_user_name_and_avatar(steamid):
         user_info = user_info[0]
 
         user_data = {
-        "user_name": user_info["personaname"], 
+        "user_name": profanity.censor(user_info["personaname"]), 
         "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""),
         }
         account_created = user_info.get("timecreated", None)
