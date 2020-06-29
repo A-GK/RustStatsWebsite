@@ -227,7 +227,11 @@ def delete_inactive_users(request):
     if not request.user.is_staff:
         return JsonResponse({"success": False})
     try:
-        users = User.objects.filter(last_successful_update__isnull=True, last_attempted_update__lte=timezone.now()-timezone.timedelta(hours=3))
+        users = User.objects.filter(
+            last_successful_update__isnull=True, 
+            last_attempted_update__lte=timezone.now()-timezone.timedelta(hours=3),
+            is_banned=False  # Prevers banned users even if they have a private account
+        )
         count = users.count()
         users.delete()
         return JsonResponse({"response": f"Successfully deleted {count} users"})
