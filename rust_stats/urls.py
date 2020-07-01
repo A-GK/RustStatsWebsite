@@ -22,6 +22,7 @@ urlpatterns = [
     path('rust-stats/user-friends/<int:user_id>', views.user_friends, name='user_friends'),
     path('rust-stats/ban-user', views.ban_user, name='ban_user'),
     path('rust-stats/delete-user', views.delete_user, name='delete_user'),
+    path('discord-bot', views.discord_bot_page, name='discord_bot_page'),
     # 4 hours cache time for sitemaps
     path('sitemap.xml',  cache_page(14400)(sitemaps_views.index), {'sitemaps': sitemaps, 'sitemap_url_name': 'sitemaps'}),
     path('sitemap-<section>.xml', cache_page(14400)(sitemaps_views.sitemap), {'sitemaps': sitemaps}, name='sitemaps'),

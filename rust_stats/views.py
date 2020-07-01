@@ -239,5 +239,9 @@ def delete_inactive_users(request):
         return JsonResponse({"success": False})
 
 
+def discord_bot_page(request):
+    return render(request, 'rust_stats/discord_bot.html')
+
+
 def page_not_found(request, exception):
     return render(request, 'rust_stats/404.html', status=404)
