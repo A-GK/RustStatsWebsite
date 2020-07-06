@@ -6,10 +6,10 @@ from django.urls import reverse
 class StaticViewSitemap(Sitemap):
     priority = 1
     protocol = "https"
-    changefreq = 'daily'
+    changefreq = "daily"
 
     def items(self):
-        return ['index']
+        return ["index", "discord_bot_page"]
 
     def location(self, item):
         return reverse(item)
