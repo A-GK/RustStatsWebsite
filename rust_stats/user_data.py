@@ -117,11 +117,6 @@ def get_user_stats(steamid):
 ############################# END USER STATS #############################
 
 
-def filter_user_name(user_name):
-    return 
-    
-
-
 def get_user_name_and_avatar(steamid):
     if not is_test:
         try:
@@ -144,7 +139,7 @@ def get_user_name_and_avatar(steamid):
         user_info = user_info[0]
 
         user_data = {
-        "user_name": profanity.censor(user_info["personaname"]), 
+        "user_name": profanity.censor(user_info["personaname"])[:32], 
         "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""),
         }
         account_created = user_info.get("timecreated", None)
