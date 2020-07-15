@@ -1,4 +1,4 @@
-import requests, logging
+import requests, logging, re
 from sys import argv
 from cachetools import cached, TTLCache
 from django.utils import timezone
@@ -138,8 +138,11 @@ def get_user_name_and_avatar(steamid):
             return None
         user_info = user_info[0]
 
+        user_name = profanity.censor(user_info["personaname"])[:32]
+        user_name = re.sub(r"(http(s)?:\/\/.)?(www\.)?([-a-zA-Z0-9@:%._\+~#=]{2,256})\.(com|net|io)\b([-a-zA-Z0-9@:%_\+.~#? &//=]*)", "****", user_name)
+
         user_data = {
-        "user_name": profanity.censor(user_info["personaname"])[:32], 
+        "user_name": user_name, 
         "avatar": user_info["avatarfull"].replace("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/", ""),
         }
         account_created = user_info.get("timecreated", None)
