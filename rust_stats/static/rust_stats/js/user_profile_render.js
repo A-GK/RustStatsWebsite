@@ -31,6 +31,16 @@ var userStats = new Vue({
     },
 
     methods: {
+        humanizeNumbers: function (num) {
+            if (num > 999999) {  // > 999,999
+                return numeral(num).format('0.00a');
+            } else if (num > 99999) { // > 99,999
+                return numeral(num).format('0.0a');
+            } else {
+                return numeral(num).format('0,0');
+            }
+        },
+
         getFriends: function () {
             // Load user friends and set <friends> with the response
             var _this = this;  // because => function binds this to itself
@@ -38,6 +48,10 @@ var userStats = new Vue({
                 _this.friends = json;
                 _this.friends.friends = shuffleArray(json.friends);
                 _this.friendsNum = json.friends.length;
+                _this.friends.friends.forEach(function(friend) {
+                    if (friend.hours_played == 0) return;
+                    friend.hours_played = _this.humanizeNumbers(friend.hours_played);
+                });
             });
         },
 
@@ -77,13 +91,7 @@ var userStats = new Vue({
                             _this.user[key] = moment.duration(_this.user[key], "seconds").humanize({h:99999, s:0});
                             return;
                     }
-                    if (_this.user[key] > 999999) {  // > 999,999
-                        _this.user[key] = numeral(_this.user[key]).format('0.00a');
-                    } else if (_this.user[key] > 99999) { // > 99,999
-                        _this.user[key] = numeral(_this.user[key]).format('0.0a');
-                    } else {
-                        _this.user[key] = numeral(_this.user[key]).format('0,0');
-                    }
+                    _this.user[key] = _this.humanizeNumbers(_this.user[key]);
                 }
             });
         },
