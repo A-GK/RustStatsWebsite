@@ -5,9 +5,21 @@
 <html lang="en">
 
 <head>
-    <script data-ad-client="ca-pub-9897579781628281" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (function () {
+          var s = document.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = 'https://app.termly.io/embed.min.js';
+          s.id = 'f8f7e62a-5321-4d22-8c70-f5f2243ac4e9';
+          s.setAttribute("data-name", "termly-embed-banner");
+          var x = document.getElementsByTagName('script')[0];
+          x.parentNode.insertBefore(s, x);
+        })();
+      </script>
+    <script type="text/plain" data-categories="advertising" data-ad-client="ca-pub-3443726191052819" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171026764-1"></script>
+    <script type="text/plain" data-categories="analytics" async src="https://www.googletagmanager.com/gtag/js?id=UA-171026764-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -61,17 +73,19 @@
             {% block footer %}
             <footer class="footer">
                 <div class="row" id="footer-disclaimers">
+                    <div class="col col-12 col-md-6 site-info">
+                        <a href="https://app.termly.io/document/privacy-policy/4a952f8d-a936-4239-8821-695a6bc5160a" target="_blank"><span>Privacy Policy</span></a>
+                        <span> | </span>
+                        <a href="https://app.termly.io/document/cookie-policy/394b216a-4c60-4a38-9ea8-16ef5e901e17" target="_blank"><span>Cookie Policy</span></a>
+                        <span> | </span>
+                        <a href="#" onclick="displayPreferenceModal()"><span>Cookie Preferences</span></a>
+                    </div>
                     <div class="col col-12 col-md-6 d-none d-md-block site-info" id="discord-desktop">
-                        <a href="https://discord.gg/QnYh9QB" target="_blank">
-                            <span class="">Join our discord server if you have suggestions/feedback</span>
-                        </a>
+                        <a href="https://discord.gg/QnYh9QB" target="_blank"><span class="float-right">Join our discord server if you have suggestions/feedback</span></a>
                     </div>
                     <div class="col col-12 col-md-6 d-block d-md-none site-info" id="discord-mobile">
-                        <a href="https://discord.gg/QnYh9QB" target="_blank">
-                            <span>Join our discord server if you have suggestions/feedback</span>
-                        </a>
+                        <a href="https://discord.gg/QnYh9QB" target="_blank"><span>Join our discord server if you have suggestions/feedback</span></a>
                     </div>
-                    <div class="col col-12 col-md-6 site-info"><span></span></div>
                     <div class="col" id="other-disclaimers">
                         <span>Statistics are provided by Steam. These stats are only tracked on servers under the "Official Servers" tab. Intentional abuse of the stats system will lead to a profile ban.<br></span><span>Steam is a registered trademark of Valve. Valve has not endorsed and is not responsible for this site or its content.<br></span><span>Rust is a registered trademark of Facepunch. Game materials copyright Facepunch. Facepunch has not endorsed and is not responsible for this site or its content.<br></span><span>Trademarks are the property of their respective owners.</span>
                     </div>
