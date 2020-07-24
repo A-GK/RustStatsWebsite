@@ -5,18 +5,6 @@
 <html lang="en">
 
 <head>
-    <script>
-        (function () {
-          var s = document.createElement('script');
-          s.type = 'text/javascript';
-          s.async = true;
-          s.src = 'https://app.termly.io/embed.min.js';
-          s.id = 'f8f7e62a-5321-4d22-8c70-f5f2243ac4e9';
-          s.setAttribute("data-name", "termly-embed-banner");
-          var x = document.getElementsByTagName('script')[0];
-          x.parentNode.insertBefore(s, x);
-        })();
-      </script>
     <script type="text/plain" data-categories="advertising" data-ad-client="ca-pub-3443726191052819" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script type="text/plain" data-categories="analytics" async src="https://www.googletagmanager.com/gtag/js?id=UA-171026764-1"></script>
@@ -111,6 +99,18 @@
 
     {% block footer_scripts %}{% endblock %}
     <script src="{% static 'rust_stats/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script>
+    (function () {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'https://app.termly.io/embed.min.js';
+        s.id = 'f8f7e62a-5321-4d22-8c70-f5f2243ac4e9';
+        s.setAttribute("data-name", "termly-embed-banner");
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+    })();
+    </script>
 </body>
 
 </html>
