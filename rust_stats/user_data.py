@@ -210,11 +210,10 @@ def create_user_data(steamid):
 
     user_hours_played = get_user_hours_played(steamid)
     if user_hours_played is None:  # User's profile is set to private, etc.
-        user = User(**user_data)
-        user.save()
         logger.debug(f"While creating user_data, user_hours_played returned None. steamid {steamid}")
-        return True
-    user_data["hours_played"] = user_hours_played
+        user_data["hours_played"] = 0
+    else:
+        user_data["hours_played"] = user_hours_played
     logger.debug(f"While creating user_data, successfully received user_hours_played. steamid {steamid}")
 
     user_stats = get_user_stats(steamid)
@@ -263,8 +262,9 @@ def update_user_data(user):
     if user_hours_played is None:  # User's profile is set to private, etc.
         update_user_model(user, user_data)
         logger.debug(f"While updating user_data, user_hours_played returned None. user_id {user.user_id}")
-        return None
-    user_data["hours_played"] = user_hours_played
+        user_data["hours_played"] = 0
+    else:
+        user_data["hours_played"] = user_hours_played
     logger.debug(f"While updating user_data, successfully received user_hours_played. user_id {user.user_id}")
 
     user_stats = get_user_stats(steamid)
