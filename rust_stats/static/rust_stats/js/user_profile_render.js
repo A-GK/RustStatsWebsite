@@ -162,11 +162,6 @@ var userStats = new Vue({
                 hideElementById("footer-disclaimers");
             }
 
-            // Display ads
-            for (i = 0; i < 3; i++) {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-
         });
     }
 })
