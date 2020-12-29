@@ -113,18 +113,7 @@
                 </div>
             </div>
 
-            <div class="ad">
-                <!-- Below Friend List -->
-                <ins class="adsbygoogle"
-                    style="display:block; margin-top:12px;"
-                    data-ad-client="ca-pub-3443726191052819"
-                    data-ad-slot="5116357123"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
+
         </div>
         <div v-if="user && user.success" class="col">
 
@@ -226,34 +215,6 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                        </div>
-                    {% endif %}
-                    {% if forloop.counter == 1 %}
-                        <div class="ad col col-12">
-                            <!-- First in-profile -->
-                            <ins class="adsbygoogle"
-                                style="display:block;margin-bottom:1.6em"
-                                data-ad-client="ca-pub-3443726191052819"
-                                data-ad-slot="1641088499"
-                                data-ad-format="horizontal"
-                                data-full-width-responsive="true"></ins>
-                            <script>
-                                (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
-                        </div>
-                    {% endif %}
-                    {% if forloop.counter == 15 %}
-                        <div class="ad col col-12">
-                            <!-- Last in-profile -->
-                            <ins class="adsbygoogle"
-                                style="display:block;margin-bottom:1.6em"
-                                data-ad-client="ca-pub-3443726191052819"
-                                data-ad-slot="6806334000"
-                                data-ad-format="horizontal"
-                                data-full-width-responsive="true"></ins>
-                            <script>
-                                (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
                         </div>
                     {% endif %}
                 {% endfor %}
