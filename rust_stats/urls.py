@@ -28,6 +28,5 @@ urlpatterns = [
     path('sitemap.xml',  cache_page(14400)(sitemaps_views.index), {'sitemaps': sitemaps, 'sitemap_url_name': 'sitemaps'}),
     path('sitemap-<section>.xml', cache_page(14400)(sitemaps_views.sitemap), {'sitemaps': sitemaps}, name='sitemaps'),
     path("robots.txt", TemplateView.as_view(template_name="rust_stats/robots.txt", content_type="text/plain")),
-    path("ads.txt", TemplateView.as_view(template_name="rust_stats/ads.txt", content_type="text/plain")),
     path('delete_inactive_users', views.delete_inactive_users, name='delete_inactive_users'),
 ]
