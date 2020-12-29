@@ -26,6 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js" integrity="sha256-LlHVI5rUauudM5ZcZaD6hHPHKrA7CSefHHnKgq+/AZc=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{% static 'rust_stats/css/styles.css' %}">
+    <script data-name="BMC-Widget" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="GK01" data-description="Buy me a coffee!" data-message="Thanks for your support" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
     {% block header_scripts %}{% endblock %}
     {% block header_content %}{% endblock %}
 </head>
@@ -40,6 +41,7 @@
                     <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="/discord-bot">Discord Bot</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="https://discord.gg/QnYh9QB" target="_blank">Discord Server</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="https://skinsdelta.com/rust/" target="_blank">Skins Stats</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active nav-item" href="https://www.buymeacoffee.com/GK01" target="_blank">Donate</a></li>
                 </ul>
                 <ul class="nav navbar-nav ml-auto">
                     {% if user.is_authenticated %}
