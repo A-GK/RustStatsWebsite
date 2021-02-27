@@ -742,6 +742,7 @@ body::-webkit-scrollbar-thumb {
 @media (min-width: 992px) {
 	#rustinity-banner {
 		display: block;
+		width: 100%;
 		height: 100%;
 		display: flex;
 		justify-content: center;
