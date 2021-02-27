@@ -525,9 +525,9 @@ body {
   opacity: 1;
 }
 
-.navbar.navbar-light.navbar-expand-md {
+/* .navbar.navbar-light.navbar-expand-md {
   margin-bottom: 1em;
-}
+} */
 
 .friends-row {
   margin: 0px;
@@ -735,3 +735,21 @@ body::-webkit-scrollbar-thumb {
   padding: 0.5em 0;
 }
 
+#rustinity-banner {
+	display: none;
+
+}
+@media (min-width: 992px) {
+	#rustinity-banner {
+		display: block;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+	}
+}
+
+@media (min-width: 992px) {
+	#user-profile-card {
+		padding-top: 14px;
+	}
+}
